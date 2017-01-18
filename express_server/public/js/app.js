@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('app', ['ionic'])
 .factory('socket', function ($rootScope) {
-  var socket = io.connect('http://112.78.3.114:2000');
+  var socket = io.connect('http://localhost:2000');
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {
