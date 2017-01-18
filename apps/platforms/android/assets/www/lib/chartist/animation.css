@@ -1,0 +1,199 @@
+@-webkit-keyframes width-pulse {
+  0% {
+    stroke-width: 8px
+  }
+  50% {
+    stroke-width: 12px;
+  }
+  100% {
+    stroke-width: 8px;
+  }
+}
+@-webkit-keyframes dashoffset-seven {
+  0% {
+    stroke-dashoffset: 12px;
+    stroke-width: 8px
+  }
+  100% {
+    stroke-dashoffset: 0px;
+    stroke-width: 8px
+  }
+}
+@-webkit-keyframes dasharray-craziness {
+  20% {
+    stroke-dasharray: 7px 2px;
+    stroke-width: 8px
+  }
+  80% {
+    stroke-dasharray: 7px 12px;
+    stroke-width: 8px
+  }
+  100% {
+    stroke-dasharray: 7px 2px;
+    stroke-width: 8px
+  }
+}
+@keyframes width-pulse {
+  0% {
+    stroke-width: 8px
+  }
+  50% {
+    stroke-width: 10px;
+  }
+  100% {
+    stroke-width: 8px;
+  }
+}
+@keyframes dashoffset-seven {
+  0% {
+    stroke-dashoffset: 12px;
+    stroke-width: 8px
+  }
+  100% {
+    stroke-dashoffset: 0px;
+    stroke-width: 8px
+  }
+}
+@keyframes dasharray-craziness {
+  20% {
+    stroke-dasharray: 7px 2px;
+    stroke-width: 8px
+  }
+  80% {
+    stroke-dasharray: 7px 12px;
+    stroke-width: 8px
+  }
+  100% {
+    stroke-dasharray: 7px 2px;
+    stroke-width: 8px
+  }
+}
+.ct-chart .ct-label.ct-vertical,
+.ct-chart .ct-label.ct-horizontal {
+  color: rgba(255, 255, 255, 0.5);
+}
+.ct-chart .ct-grid.ct-vertical,
+.ct-chart .ct-grid.ct-horizontal {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-dasharray: 2px;
+  shape-rendering: crispEdges;
+}
+.ct-chart .ct-series.ct-series-a .ct-line {
+  stroke: #4ECDC4;
+  stroke-width: 10px;
+  stroke-linecap: round;
+  animation: width-pulse 2s infinite;
+  -webkit-animation: width-pulse 2s infinite;
+}
+.ct-chart .ct-series.ct-series-c .ct-line {
+  stroke: #C7F464;
+  stroke-width: 2px;
+  stroke-dasharray: 5px 2px;
+  animation: dashoffset-seven 200ms infinite linear;
+  -webkit-animation: dashoffset-seven 200ms infinite linear;
+}
+.ct-chart .ct-series.ct-series-b .ct-line {
+  stroke: #FF6B6B;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-dasharray: 30px 5px;
+  animation: dasharray-craziness 10s infinite linear;
+  -webkit-animation: dasharray-craziness 10s infinite linear;
+}
+@-webkit-keyframes slideIn {
+  0% {
+    left: -20%;
+  }
+  100% {
+    left: 0;
+  }
+}
+.slide-in{
+   -webkit-animation: slideIn ease-in 1;
+  animation: slideIn ease-in 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 800ms;
+  animation-duration: 800ms;
+}
+@-webkit-keyframes slideLeftFrom0To1 {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: -100vw;
+  }
+}
+@-webkit-keyframes slideLeftFrom1To2 {
+  0% {
+    margin-left: -100vw;
+  }
+  100% {
+    margin-left: -200vw;
+  }
+}
+@-webkit-keyframes slideLeftFrom2To3 {
+  0% {
+    margin-left: -200vw;
+  }
+  100% {
+    margin-left: -300vw;
+  }
+}
+@-webkit-keyframes slideBackFrom1To0 {
+  0% {
+    margin-left: -100vw;
+  }
+  100% {
+    margin-left: 0px;
+  }
+}
+.slide-left-from-0-to-1{
+   -webkit-animation: slideLeftFrom0To1 ease-out 1;
+  animation: slideLeftFrom0To1 ease-out 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 300ms;
+  animation-duration: 300ms;
+}
+.slide-left-from-1-to-2{
+   -webkit-animation: slideLeftFrom1To2 ease-out 1;
+  animation: slideLeftFrom1To2 ease-out 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 300ms;
+  animation-duration: 300ms;
+}
+.slide-left-from-2-to-3{
+   -webkit-animation: slideLeftFrom2To3 ease-out 1;
+  animation: slideLeftFrom2To3 ease-out 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 300ms;
+  animation-duration: 300ms;
+}
+.slide-back-from-1-to-0{
+   -webkit-animation: slideBackFrom1To0 ease-out 1;
+  animation: slideBackFrom1To0 ease-in 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 600ms;
+  animation-duration: 600ms;
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in{
+   -webkit-animation: fadeIn ease-in 1;
+  animation: fadeIn ease-in 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 1200ms;
+  animation-duration: 1200ms;
+}

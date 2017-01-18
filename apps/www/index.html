@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Days+One|Montserrat+Alternates" rel="stylesheet">
+    <!-- un-comment this code to enable service worker
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(() => console.log('service worker installed'))
+          .catch(err => console.log('Error', err));
+      }
+    </script>-->
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="lib/ionic-material/dist/ionic.material.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet">
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+    <!-- ionic/angularjs js -->
+    <link rel="stylesheet" href="lib/chartist/chartist.css">
+    <link rel="stylesheet" href="lib/chartist/animation.css">
+    <script src="lib/chartist/chartist.min.js"></script>
+
+
+
+    <script src="lib/assest/jquery.js"></script>
+
+    <script src="lib/highchart/script.js"></script>
+    <script src="lib/highchart/more.js"></script>
+    <script src="lib/highchart/gauge.js"></script>
+    <script src="lib/highchart/theme.js"></script>
+    <script src="lib/assest/velocity.js"></script>
+
+
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic-material/dist/ionic.material.min.js"></script>
+    <script src="lib/socket.io.js"></script>
+    <script src="lib/ng-cordova.min.js"></script>
+    <script src="lib/ng-cordova-bluetoothle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+  </head>
+  <body ng-app="app" ng-controller="mainController" class="page app-body-bg" style="overflow:hidden;position:relative;">
+    <div id="pager" class="basic-div" style="width:400vw;margin-left:-0vw;position:relative;">
+      <div id="page1" class="basic-div" style="width:100vw;height:100vh;overflow-x:hidden;">
+        <label class="page-title-define-by-me primary-text-color" style="margin-top:60px;font-size:18px;">Step 1</label>
+        <div class="basic-div div-chua-img-title primary-text-color-bg shadow-2">
+          <img src="img/device.svg" class="img-title"/>
+        </div>
+        <label class="page-title-define-by-me primary-text-color" style="margin-bottom:20px;">{{languageConfig.page1Title | uppercase}}</label>
+        <button ng-click="startScan()" class="bottom-btn-defined-by-me button button-raised button-stable ink-dark">
+          Scan
+        </button>
+        <div class="basic-div" style="width:100%;">
+          <a ng-click="prompConnect(device)" ng-repeat="device in devices" class="item item-icon-left primary-text-color animate-ripple" style="border:none;font-size:16px;line-height:24px;color:rgb(243,248,254);font-family: 'Montserrat', sans-serif;">
+            <i class="icon ion-power primary-text-color" style="font-size:28px;margin-top:-4px;"></i>
+            {{device.name}}<br/>
+            <span style="font-size:12px;margin-top:-6px;display:inline-block;float:left;" class="secondary-text-color">{{device.address}}</span>
+          </a>
+          <a ng-click="chooseThisService(service)" ng-repeat="service in selectedDevice.services track by service.uuid" ng-show="selectedDevice.services" class="item item-icon-left primary-text-color animate-ripple" style="border:none;font-size:16px;line-height:24px;color:rgb(243,248,254);font-family: 'Montserrat', sans-serif;">
+            <i class="icon ion-power primary-text-color" style="font-size:28px;margin-top:-4px;"></i>
+            <span style="font-size:12px;margin-top:-6px;display:inline-block;float:left;" class="secondary-text-color">{{service.uuid}}</span>
+          </a>
+          <a ng-click="readThisCharacteristic(characteristic)" ng-repeat="characteristic in selectedService.characteristics track by characteristic.uuid" ng-show="selectedService.characteristics" class="item item-icon-left primary-text-color animate-ripple" style="border:none;font-size:16px;line-height:24px;color:rgb(243,248,254);font-family: 'Montserrat', sans-serif;">
+            <i class="icon ion-power primary-text-color" style="font-size:28px;margin-top:-4px;"></i>
+            <span style="font-size:12px;margin-top:-6px;display:inline-block;float:left;" class="secondary-text-color">{{characteristic.uuid}}</span>
+          </a>
+        </div>
+      </div>
+      <div id="page2" class="basic-div" style="width:100vw;height:100vh;overflow-x:hidden;">
+        <label class="page-title-define-by-me primary-text-color" style="margin-top:60px;font-size:18px;">Step 2</label>
+        <div class="basic-div div-chua-img-title primary-text-color-bg shadow-2">
+          <img src="img/measure.svg" class="img-title"/>
+        </div>
+        <label class="page-title-define-by-me primary-text-color" style="margin-bottom:20px;">{{languageConfig.page2Title | uppercase}}</label>
+        <!--<button ng-click="backWardFrom1To0()" class="bottom-btn-defined-by-me button button-fab button-stable icon ion-chevron-left" style="left:18px;top:calc(100vh - 76px)"></button>-->
+        <button class="bottom-btn-defined-by-me button button-raised button-stable ink-dark">
+          Create
+        </button>
+        <div class="basic-div" style="width:100%;margin-top:20px;">
+          <a ng-click="chooseMeasurement(measure)" ng-repeat="measure in measurements" ng-last-repeat="measureList" class="item item-icon-left primary-text-color" style="border:none;font-size:16px;line-height:24px;color:rgb(243,248,254);font-family: 'Montserrat', sans-serif;">
+            <i class="icon ion-android-alarm-clock primary-text-color" style="font-size:28px;margin-top:-4px;"></i>
+            {{measure.name}}<br/>
+            <span style="font-size:12px;margin-top:-6px;display:inline-block;float:left;" class="secondary-text-color">{{measure.description}}</span>
+          </a>
+        </div>
+      </div>
+      <div id="page3" class="basic-div" style=";width:100vw;height:100vh;overflow-x:hidden;">
+        <label class="page-title-define-by-me primary-text-color" style="margin-top:60px;font-size:18px;">Step 3</label>
+        <div class="basic-div div-chua-img-title primary-text-color-bg shadow-2">
+          <img src="img/statistics.svg" class="img-title"/>
+        </div>
+        <label class="page-title-define-by-me primary-text-color" style="margin-bottom:20px;">{{languageConfig.page3Title | uppercase}}</label>
+        <button ng-click="proceedToReport()" class="bottom-btn-defined-by-me button button-raised button-stable ink-dark">
+          Proceed
+        </button>
+        <div class="basic-div" style="width:100%;">
+          <div id="measuring-chart" class="ct-chart ct-golden-section" style="width:100%;min-height:40vh;background-color:transparent;"></div>
+        </div>
+      </div>
+      <div id="page4" class="basic-div" style=";width:100vw;height:100vh;overflow-x:hidden;">
+        <label class="page-title-define-by-me primary-text-color" style="margin-top:60px;font-size:18px;">Step 4</label>
+        <div class="basic-div div-chua-img-title primary-text-color-bg shadow-2">
+          <img src="img/report.svg" class="img-title"/>
+        </div>
+        <label class="page-title-define-by-me primary-text-color" style="margin-bottom:20px;">{{languageConfig.page4Title | uppercase}}</label>
+        <button ng-click="saveAndQuit()" class="bottom-btn-defined-by-me button button-raised button-stable ink-dark">
+          Save and Quit
+        </button>
+        <div id="reportChart" class="basic-div" style="opacity:0;display:none;width:110%;margin-left:-4%;margin-top:-24px;">
+
+            <div id="report-chart" class="ct-chart"></div>
+
+        </div>
+        <div id="reportStatistic" style="opacity:0;width:80%;left:10%;bottom:86px;display:none;position:absolute;">
+
+            <div class="basic-div" style="width:33%;">
+              <label style="font-family:Montserrat;font-size:32px;font-weight:600;" class="xanh-duong-color normal-text">89</label>
+              <label class="primary-text-color normal-text" style="font-size:12px;margin-top:21px;">bpm</label>
+              <label class="primary-text-color normal-text" style="width:100%;font-size:14px;margin-top:-6px;">Heart rate</label>
+            </div>
+            <div class="basic-div" style="width:33%;">
+              <label style="font-family:Montserrat;font-size:32px;font-weight:600;" class="red-color normal-text">1.85</label>
+              <label class="primary-text-color normal-text" style="width:100%;font-size:14px;margin-top:-6px;">Variability</label>
+            </div>
+            <div class="basic-div" style="width:33%;">
+              <label style="font-family:Days One;font-size:32px;" class="vang-color normal-text">Norm</label>
+              <label class="primary-text-color normal-text" style="width:100%;font-size:14px;margin-top:-6px;">Health</label>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute-div" style="width:100%;height:60px;top:0px;left:0px;display:inline-block;text-align:center;">
+      <label class="page-title-define-by-me primary-text-color" style="font-size:20px;line-height:50px;">CASSANDRA</label>
+    </div>
+  </body>
+</html>

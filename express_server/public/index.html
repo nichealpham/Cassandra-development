@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+    <script src="lib/jquery-1.10.2.min.js"></script>
+    <script src="lib/socket.io.js"></script>
+
+    <script type="text/javascript" src="lib/dygraph.js"></script>
+    <script type="text/javascript" src="lib/smooth-plotter.js"></script>
+  <!--  <script src="lib/flotr2.min.js"></script>  -->
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+  </head>
+  <body ng-app="app" ng-controller="mainController">
+
+
+  <ion-side-menus>
+    <ion-side-menu-content drag-content="false">
+      <ion-pane>
+        <div class="bar bar-header bar-positive has-tabs-top" id="headerBar">
+          <button class="button icon ion-navicon" ng-click="toggleLeftSideMenu()"></button>
+          <h1 class="title">CASSANDRA</h1>
+          <button class="button" ng-click="toggleRightSideMenu()">Chat</button>
+        </div>
+        <div class="tabs-striped tabs-top tabs-background-positive tabs-color-light" id="tabBar">
+          <div class="tabs">
+            <a class="tab-item active" href="#" ng-click="tab1Clicked()">
+              <i class="icon ion-home"></i>
+              Test
+            </a>
+            <a class="tab-item" href="#" ng-click="tab2Clicked()">
+              <i class="icon ion-star"></i>
+              Favorites
+            </a>
+            <a class="tab-item" href="#" ng-click="tab3Clicked()">
+              <i class="icon ion-gear-a"></i>
+              Settings
+            </a>
+          </div>
+        </div>
+        <ion-content>
+
+          <div class="content" id="tab1View">
+
+            <div id="container1_1" class="chartContainer" style="width:100%;min-height:200px;"></div>
+
+            <div class="wrapper">
+              <button class="button button-block button-positive" ng-click="animate()" ng-show="actionShow">
+                {{actionName}}
+              </button>
+            </div>
+            <p ng-repeat="obj in debugObj track by $index">
+              {{obj.counter}}: {{obj.value[0]}}: {{obj.value[1]}} - {{obj.time}}
+            </p>
+
+
+          </div>
+
+          <div class="content" id="tab2View">
+
+            <div id="container2_1" class="chartContainer" style="width:100%;min-height:400px;"></div>
+
+
+          </div>
+
+          <div class="content" id="tab3View">
+
+            <div class="wrapper">
+              <h4 style="width:100%;display:inline-block;text-align:center;">PARAMETERS EXTRACTION</h4>
+            </div>
+
+
+          </div>
+
+
+
+        </ion-content>
+      </ion-pane>
+    </ion-side-menu-content>
+    <ion-side-menu side="left">
+        <ion-header-bar class="bar-positive">
+            <h1 class="title">Qu&#x1EA3;n l&#xFD; thi&#x1EBF;t b&#x1ECB;</h1>
+        </ion-header-bar>
+        <ion-content>
+            <ion-list>
+                <div class="item item-divider">
+                    Thi&#x1EBF;t b&#x1ECB; ngo&#x1EA1;i vi:
+                </div>
+                <ion-item ng-repeat="device in devices" menu-close="false" ng-click="prompConnect(device)">
+                    {{device.name}}
+                </ion-item>
+                <ion-item menu-close="false" ng-click="showDebug()">
+                    Debug: {{dialog}}
+                </ion-item>
+                <button class="button button-block button-positive" ng-click="startScan()" style="width:90%;margin-left:5%;height:30px;line-height:30px;">
+                  Scan thi&#x1EBF;t b&#x1ECB;
+                </button>
+                <div class="item item-divider">
+                    Services:
+                </div>
+                <ion-item menu-close="false" ng-show="selectedDevice.services" ng-repeat="service in selectedDevice.services track by service.uuid" ng-click="chooseThisService(service)">
+                    {{service.uuid}}
+                </ion-item>
+                <div class="item item-divider">
+                    Characteristics:
+                </div>
+                <ion-item menu-close="true" ng-show="selectedService.characteristics" ng-repeat="characteristic in selectedService.characteristics track by characteristic.uuid" ng-click="readThisCharacteristic(characteristic)">
+                    {{characteristic.uuid}}
+                </ion-item>
+                <div class="item item-divider">
+                    Ph&#x1B0;&#x1A1;ng ph&#xE1;p &#x111;o:
+                </div>
+                <ion-item menu-close="" ng-click="login()">
+                    &#x110;o c&#x1A1; b&#x1EA3;n
+                </ion-item>
+                <div class="item item-divider">
+                    Kết nối qua address:
+                </div>
+                <ion-item menu-close="false">
+                  <label class="item item-input">
+                    <input type="text" placeholder="address..." ng-model="address">
+                  </label>
+                </ion-item>
+                <button class="button button-block button-positive" ng-click="prompConnectWithAddress()" style="width:50%;float:right;margin-right:5%;height:30px;line-height:30px;">
+                  Tìm thiết bị này
+                </button>
+
+
+            </ion-list>
+        </ion-content>
+
+    </ion-side-menu>
+    <ion-side-menu side="right">
+        <ion-header-bar class="bar-positive">
+            <h1 class="title">Chat</h1>
+        </ion-header-bar>
+        <ion-content>
+
+        </ion-content>
+
+    </ion-side-menu>
+  </ion-side-menus>
+  </body>
+</html>

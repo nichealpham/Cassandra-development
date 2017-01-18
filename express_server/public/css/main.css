@@ -1,0 +1,496 @@
+* {
+  color: black;
+}
+button:focus{
+  outline: none;
+}
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.header{
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    border-bottom: 1px solid #E0E0E0;
+    display: inline-block;
+    z-index: 100;
+    background-color: white;
+}
+.hover{
+  background-color: #F5F5F5;
+  border-bottom: none;
+}
+.gray_text {
+  color: #616161;
+}
+.subHeader{
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #E0E0E0;
+  display: inline-block;
+  float: left;
+  position: relative;
+}
+.content{
+    width: 100%;
+    display: inline-block;
+    margin-top: 60px;
+    float: left;
+    min-height: 500px;
+}
+.header button{
+  font-size: 16px;
+  font-weight: lighter;
+  height: 60px;
+  line-height: 60px;
+  padding: 0px 12px 0px 12px;
+  color: #757575;
+  background-color: white;
+  text-align: left;
+  display: inline-block;
+  transition: background-color 0.4s;
+  cursor: pointer;
+  border-bottom: 1px solid #E0E0E0;
+}
+.subHeader button{
+  font-size: 14px;
+  font-weight: lighter;
+  height: 50px;
+  line-height: 50px;
+  padding: 0px 12px 0px 12px;
+  color: #757575;
+  background-color: white;
+  text-align: left;
+  display: inline-block;
+  transition: background-color 0.4s;
+  cursor: pointer;
+  border-bottom: 1px solid #E0E0E0;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+}
+.subHeader button i{
+  margin-right: 8px;
+}
+.header a{
+  font-size: 16px;
+  font-weight: lighter;
+  height: 60px;
+  line-height: 60px;
+  padding: 0px 12px 0px 12px;
+  color: #757575;
+  background-color: white;
+  text-align: left;
+  display: inline-block;
+  transition: background-color 0.4s;
+  cursor: pointer;
+  border-bottom: 1px solid #E0E0E0;
+}
+.header a:focus{
+  border-bottom: none;
+  background-color: #F5F5F5;
+}
+.badge{
+  font-size: 10px;
+  font-weight: lighter;
+  display: inline-block;
+  float: right;
+  margin-left: -14px;
+  margin-top: -10px;
+  background-color: #E91E63;
+}
+.header button i{
+  font-size: 21px;
+  margin-right: 6px;
+}
+.header a i{
+  font-size: 21px;
+  margin-right: 6px;
+}
+.header button img{
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  float: left;
+  margin-top: 0px;
+  margin-right: 16px;
+  margin-left: 4px;
+}
+.header button:hover{
+  background-color: #F5F5F5;
+}
+.subHeader button:hover{
+  background-color: #F5F5F5;
+}
+.header a:hover{
+  background-color: #F5F5F5;
+  text-decoration: none;
+}
+.header a:focus{
+  text-decoration: none;
+}
+.header button:focus{
+  outline: none;
+}
+.subHeader button:focus{
+  outline: none;
+}
+.left{
+  float: left;
+  border-top: 0px;
+  border-left: 0px;
+  border-bottom: 0px;
+  border-right: 1px solid #E0E0E0;
+}
+.right{
+  float: right;;
+  border-top: 0px;
+  border-right: 0px;
+  border-bottom: 0px;
+  border-left: 1px solid #E0E0E0;
+}
+.subText{
+  display: inline-block;
+  float: left;
+  height: 18px;
+  line-height: 18px;
+  font-size: 12px;
+  color: #212121;
+}
+.headingText{
+  display: inline-block;
+  float: left;
+  height: 40px;
+  font-size: 18px;
+  font-weight: lighter;
+  margin-top: -20px;
+  color: #757575;
+}
+.sideBar{
+  width: 25%;
+  height: 100%;
+  position: fixed;
+  margin: 0px;
+  z-index: 99;
+  background-color: white;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.tab{
+  height: 50px;
+  line-height: 48px;
+  display: inline-block;
+  float: left;
+  border-right: 1px solid #E0E0E0;
+  text-align: center;
+  color: #757575;
+  font-size: 15px;
+  cursor: pointer;
+}
+.tab i{
+  margin-right: 8px;
+  font-size: 16px;
+  margin-left: -10px;
+}
+.pannel{
+  width: 100%;
+  display: inline-block;
+}
+.divider{
+  width: 100%;
+  height: 80px;
+  display: inline-block;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid #E0E0E0;
+  transition: background-color 0.4s;
+  font-size: 18px;
+  color: #424242;
+  cursor: pointer;
+  float: left;
+  background-color: white;
+  padding-left: 12px;
+  padding-top: 10px;
+}
+.divider:hover{
+  background-color: rgb(246, 249, 252);
+}
+.divider:focus{
+  background-color: rgb(246, 249, 252);
+}
+.focus:focus{
+  background-color: rgb(246, 249, 252);
+}
+.divider img{
+  width: 50px;
+  height: 50px;
+  margin-left: 20px;
+  margin-top: 4px;
+  margin-right: 26px;
+  float: left;
+  display: inline-block;
+}
+.textAvartar{
+  width: 50px;
+  height: 50px;
+  margin-left: 20px;
+  margin-top: 4px;
+  margin-right: 26px;
+  float: left;
+  display: inline-block;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  border-radius: 50px;
+  line-height: 50px;
+  cursor: pointer;
+}
+.divider span{
+  max-width: 180px;
+  text-overflow: ellipsis;
+  display: inline-block;
+  font-size: 14px;
+  line-height: 20px;
+  height: 20px;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#sideBar_Left{
+  margin-left: 0px;
+}
+.single_pannel{
+  height: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
+  margin-top: -60px;
+  padding-top: 60px;
+  overflow-y: hidden;
+  display: inline-block;
+  float: left;
+}
+.red_bg{
+  background-color: #E91E63;
+}
+#map{
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  float: left;
+}
+.shadow_vertical{
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(163,161,163,1);
+  -moz-box-shadow: 0px 2px 5px 0px rgba(163,161,163,1);
+  box-shadow: 0px 2px 5px 0px rgba(163,161,163,1);
+}
+.shadow_horizontal{
+
+}
+.cyan{
+  background-color: rgb(38,166,154);
+}
+.bg{
+  background-color: rgb(228,233,240);
+}
+.app_title{
+  display: inline-block;
+  float: left;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  cursor: pointer;
+  text-align: left;
+  color: white;
+  border: 0px;
+  background-color: transparent;
+}
+.datepickerdemoBasicUsage {
+  /** Demo styles for mdCalendar. */
+}
+.datepickerdemoBasicUsage md-content {
+    padding-bottom: 200px;
+}
+.datepickerdemoBasicUsage .validation-messages {
+    font-size: 12px;
+    margin: 10px 0 0 25px;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+.header_block{
+  height: 50px;
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+}
+.app_body{
+  width: 100%;
+  display: inline-block;
+  float: left;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.app_footer{
+  width: 100%;
+  display: inline-block;
+  position: fixed;
+  bottom: 0px;
+  height: 50px;
+}
+.tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper {
+      background: white; }
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }
+    .inputdemoIcons {
+  /*
+.right-icon {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  left: auto;
+  margin-top: 0;
+}
+*/ }
+  .inputdemoIcons .inputIconDemo {
+    min-height: 48px; }
+  .inputdemoIcons md-input-container:not(.md-input-invalid) > md-icon.email {
+    color: green; }
+  .inputdemoIcons md-input-container:not(.md-input-invalid) > md-icon.name {
+    color: dodgerblue; }
+  .inputdemoIcons md-input-container.md-input-invalid > md-icon.email,
+  .inputdemoIcons md-input-container.md-input-invalid > md-icon.name {
+    color: red; }
+.app_header{
+  width: 100%;
+  height: 50px;
+  display: inline-block;
+  float: left;
+}
+.app_header button{
+  height: 50px;
+  line-height: 50px;
+  display: inline-block;
+  float: left;
+  padding-left: 20px;
+  padding-right: 10px;
+  border: 0px;
+}
+.app_header button i{
+  margin-right: 6px;
+}
+.app_col_2a{
+  display: inline-block;
+  float: left;
+  padding: 0px 6px 20px 20px;
+}
+.app_col_2b{
+  display: inline-block;
+  float: left;
+  padding: 0px 20px 20px 6px;
+}
+.app_card{
+  display: inline-block;
+  float: left;
+  width: 100%;
+  min-height: 120px;
+  border-radius: 4px;
+  background-color: white;
+  margin-top: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.app_card img{
+  width: 100%;
+  display: inline-block;
+  float: left;
+}
+.app_card div{
+  width: 100%;
+  display: inline-block;
+  float: left;
+  padding: 12px;
+}
+.card_title{
+  font-size: 16px;
+  line-height: 22px;
+  width: 100%;
+  display: inline-block;
+  float: left;
+  font-weight: bold;
+}
+.card_footer_title{
+  line-height:50px;
+  height:50px;
+  float:left;
+  display:inline-block;
+  font-size: 16px;
+}
+.card_action_btn{
+  border: none;
+  height: 40px;
+  line-height: 40px;
+  margin-top: 5px;
+  font-size: 16px;
+  font-weight: lighter;
+  text-align: center;
+  display: inline-block;
+  float: left;
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: background-color 0.4s;
+  background-color: white;
+  border-radius: 4px;
+}
+.card_action_btn:hover{
+  background-color: #EDEDED;
+}
+.shadow{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  border: none;
+}
+.table_header td{
+  font-weight: bold;
+  display: inline-block;
+  overflow: hidden;
+}
+.overFlow3Cham{
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.pink_color {
+  color: #E91E63;
+}
+.buttondemoBasicUsage section {
+  background: #f7f7f7;
+  border-radius: 3px;
+  text-align: center;
+  margin: 1em;
+  position: relative !important;
+  padding-bottom: 10px;
+  color: white;
+}
+.buttondemoBasicUsage md-content {
+  margin-right: 7px;
+  color: white;}
+.buttondemoBasicUsage section .md-button {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  color: white;}
+.buttondemoBasicUsage .label {
+  position: absolute;
+  bottom: 5px;
+  left: 7px;
+  font-size: 14px;
+  opacity: 0.54;
+  color: white;
+}
+.border-bottom {
+  border-bottom: 2px solid #BDBDBD;
+}
