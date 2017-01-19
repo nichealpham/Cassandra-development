@@ -12,6 +12,10 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var port = process.env.PORT || 2000;
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
 // Routing
 app.use(logger('dev'));
 app.use(bodyParser.json());
