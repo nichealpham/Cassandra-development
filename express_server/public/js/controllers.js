@@ -85,7 +85,6 @@ var app = angular.module("app")
       });
     };
     $scope.updateDyGraph = function () {
-    //  if (value == null) {
         $scope.dygraphInterval = setInterval(function() {
           if ($scope.shouldUpdateDygraph) {
             var len = $scope.databin.length;
@@ -98,27 +97,7 @@ var app = angular.module("app")
               $scope.runningIndex += 1;
             }
           }
-
-
         }, 8);
-    //  }
-    //  else {
-        // neu co dc value, then push the value into it and update the graph only once
-
-
-    //    if (value < 137500) {
-    //      value = 140500;
-    //    }
-    //  //  data.splice(0, 1);
-    //    $scope.data.splice(0, 1);
-    //    var x = new Date();  // current time
-    //    var y = value;
-    //  //  data.push([x, y]);
-    //    $scope.data.push([x, y]);
-    //    $scope.g1.updateOptions( { 'file': $scope.data } );
-
-    //  };
-
     };
     $scope.updateDyGraph();
     jQuery(".tab-item").on("click", function () {
@@ -221,7 +200,6 @@ var app = angular.module("app")
 
       }
     };
-    // Lay data from Rasperry Pi, must not delete
     socket.on('dataFilteredToMobileDeviceSentByServer', function (respone) {
       var result = respone.data;
       fbin.push(result);
@@ -235,7 +213,6 @@ var app = angular.module("app")
       $scope.databin.push([x, y]);
     });
     socket.on('dataFromServerToWebsite', function (respone) {
-  //    var x = new Date();
       var y1 = respone.value[0];
       if (y1 > 4000000) {
         var count = respone.counter;
@@ -244,13 +221,7 @@ var app = angular.module("app")
         $scope.databin.push([count, y2]);
         $scope.debugObj.push(respone);
       }
-
-  //    if (y > 2000000) {
-  //    $scope.debugObj.push(respone);
-  //    };
-
     });
-    // First time action
     $scope.initiateDygraph();
 
 

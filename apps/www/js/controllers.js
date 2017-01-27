@@ -43,29 +43,20 @@ app.controller("mainController", function($scope, $timeout, $interval, ionicMate
         params.scanMode = bluetoothle.SCAN_MODE_LOW_POWER;
         params.matchMode = bluetoothle.MATCH_MODE_STICKY;
         params.matchNum = bluetoothle.MATCH_NUM_ONE_ADVERTISEMENT;
-        //params.callbackType = bluetoothle.CALLBACK_TYPE_FIRST_MATCH;
       }
-      $cordovaBluetoothLE.startScan(params).then(
-        null,
-        function(obj) {
-          //Handle errors
-          //$ionicLoading.hide();
+      $cordovaBluetoothLE.startScan(params).then(null, function(obj) {
           $cordovaBluetoothLE.stopScan().then(null, null);
           alert("Start Scan Error");
         },
         function(obj) {
           if (obj.status == "scanResult")
           {
-            //$ionicLoading.hide();
             $scope.addDevice(obj);
             alert("Start Scan success");
             $cordovaBluetoothLE.stopScan().then(null, null);
           }
           else if (obj.status == "scanStarted")
           {
-          //  $ionicLoading.show({
-          //    template: '<div class="loader"><svg class="circular"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/></svg></div>'
-          //  });
           }
         }
       );
@@ -155,11 +146,9 @@ app.controller("mainController", function($scope, $timeout, $interval, ionicMate
       };
       $cordovaBluetoothLE.subscribe(params).then(function(obj) {
         alert("The device is auto unsubscribed. Access is denied.");
-      }, function(obj) {  // handle the errors
+      }, function(obj) {
         alert("Error in subscribe for address: " + address +"\nService: " + service + "\nCharacteristics: " + characteristic);
       }, function(obj) {
-        //Log.add("Subscribe Success : " + JSON.stringify(obj));
-
         if (obj.status == "subscribedResult") {
           var bytes = $cordovaBluetoothLE.encodedStringToBytes(obj.value);
           var bit_a = bytes[0];
