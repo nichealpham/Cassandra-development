@@ -6,10 +6,10 @@ app.config(function ($routeProvider) {
       templateUrl: "templates/homeTemplate.html",
       controller: "mainController"
     })
-    .when("/laboratory", {
-      templateUrl: "templates/laboratoryTemplate.html",
-      controller: "laboratoryController"
-    })
+    // .when("/laboratory", {
+    //   templateUrl: "templates/laboratoryTemplate.html",
+    //   controller: "laboratoryController"
+    // })
     .when("/personal", {
       templateUrl: "templates/personalTemplate.html",
       controller: "personalController"

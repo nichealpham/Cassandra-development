@@ -1,0 +1,138 @@
+<html ng-app="app" ng-controller="laboratoryController">
+<head>
+  <title>Cassandra Laboratory</title>
+  <link rel="stylesheet" type="text/css" href="css/scrollbar.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap_grid.css">
+  <link rel="stylesheet" type="text/css" href="css/global.css">
+
+  <link rel="stylesheet" type="text/css" href="lib/chartist/chartist.css">
+  <link rel="stylesheet" type="text/css" href="lib/font-awesome/font-awesome.min.css">
+</head>
+<body style="overflow:hidden;">
+
+    <div id="divMain" class="main-container container-fluid" style="width:100vw;height:100vh;position:fixed;color:white;top:0px;left:0px;padding-bottom:0px;">
+      <header style="z-index:1;height:80px;padding-top:4px;background-color:rgba(31,37,61,0.6);position:fixed;top:0px;border-radius:0px;" class="block col-md-12 hidden-sm hidden-xs">
+          <ul class="header-menu horizontal-list">
+            <li>
+                <a class="header-menu-tab"><span class="icon entypo-bell scnd-font-color"></span>Lab View</a>
+            </li>
+            <li>
+                <a class="header-menu-tab"><span class="icon entypo-cog scnd-font-color"></span>Filter Design</a>
+            </li>
+            <li>
+                <a class="header-menu-tab"><span class="icon fontawesome-user scnd-font-color"></span>Viewers</a>
+                <a ng-hide="hide_if_zero(doctors)" class="header-menu-number">{{viewers.length}}</a>
+            </li>
+
+            <li>
+                <a class="header-menu-tab"><span class="icon fontawesome-envelope scnd-font-color"></span>Analysis Report</a>
+            </li>
+          </ul>
+          <!-- <div class="profile-menu" style="cursor:pointer;">
+
+              <div class="profile-picture small-profile-picture">
+                  <img width="40px" alt="Anne Hathaway picture" src="http://upload.wikimedia.org/wikipedia/commons/e/e1/Anne_Hathaway_Face.jpg">
+              </div>
+              <p style="margin-left:10px;">{{userInfo.email}} <a href="#26"><span class="entypo-down-open scnd-font-color"></span></a></p>
+          </div> -->
+          <ul class="header-menu horizontal-list" style="float:right;">
+              <li>
+                  <a class="header-menu-tab"><span class="icon entypo-cog scnd-font-color"></span>Save & Export</a>
+              </li>
+          </ul>
+      </header>
+
+      <div id="data_view" class="lab_view" style="z-index:0;width:100%;margin-top:4px;height:100%;overflow:scroll;padding-bottom:20px;position:fixed;top:0px;padding-top:90px;padding-bottom:0px;">
+        <div class="block-general col-md-9 col-sm-12 col-xs-12" style="padding:0px 0px 0px 10px;">
+          <div class="main-container" style="width:100%;">
+            <div class="block block-general" style="width:100%;padding:10px;">
+              <h2 class="titular">ECG DATA</h2>
+              <div class="ct-chart block-general" style="width:100%;height:calc(100vh - 325px);">
+
+              </div>
+            </div>
+          </div> <!-- end main-container -->
+          <div class="col-md-4 col-sm-12 col-xs-12 feature-block" style="padding:0px 0px 0px 0px;">
+            <div class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
+              <div class="block-general" style="width:100%;height:90px;padding-bottom:0px;">
+                  <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">MEAN HR:</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12 col-xs-12 feature-block" style="padding:0px 0px 0px 10px;">
+            <div class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
+              <div class="block-general" style="width:100%;height:90px;padding-bottom:0px;">
+                  <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">VARIABILITY:</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12 col-xs-12 feature-block" style="padding:0px 0px 0px 10px;">
+            <div class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
+              <div class="block-general" style="width:100%;height:90px;padding-bottom:0px;">
+                  <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">STATUS:</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="block-general col-md-3 col-sm-12 col-xs-12" style="padding:0px 0px 0px 10px;">
+          <div class="menu-box block" style="height:auto;padding-bottom:0px;"> <!-- MENU BOX (LEFT-CONTAINER) -->
+
+              <div ng-click="open_ecg_chart()" class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;">
+                <div class="fecg-chart block-general" style="width:100%;height:90px;padding-bottom:0px;">
+                    <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">ECG1:</h2>
+                </div>
+              </div>
+
+              <div ng-click="open_hrv_chart()" class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
+                <div class="fhrv-chart block-general" style="width:100%;height:90px;padding-bottom:0px;">
+                    <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">ECG2:</h2>
+                </div>
+              </div>
+
+              <div class="block block-general" style=";width:100%;padding-bottom:0px;cursor:pointer;margin-top:-4px;height:calc(100vh - 356px);overflow:hidden;">
+                <div id="div_chat_content" style="height:calc(100vh - 406px);overflow:scroll;overflow-x:hidden;width:100%;padding:10px;">
+
+                </div>
+                <div id="div_chat_input" style="height:60px;;width:100%;">
+                  <span class="icon entypo-paper-plane scnd-font-color scnd-font-color" style="position:absolute;margin-top:15px;margin-left:10px;font-size:18px;font-weight:800;"></span>
+                  <input type="text" placeholder="Say something here..." style="width:100%;margin-left:0px;padding:0px 10px 0px 35px;border-radius:4px;">
+                </div>
+                <!-- <div class="block-general" style="height:100px;padding:10px;">
+                  <div style="width:100%;">
+                      <input type="text" placeholder="yourname@gmail.com" class="email text-input">
+                      <div class="input-icon envelope-icon-acount"><span class="fontawesome-envelope scnd-font-color"></span></div>
+                  </div>
+                </div> -->
+              </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script>
+      try {
+          $ = jQuery = module.exports;
+          // If you want module.exports to be empty, uncomment:
+          // module.exports = {};
+      } catch(e) {}
+    </script>
+    <script src="lib/bootstrap/bootstrap.min.js"></script>
+
+    <script src="lib/chartist/chartist.min.js"></script>
+
+    <script src="lib/json/json_parse.js"></script>
+    <script src="lib/json/json2.js"></script>
+    <script src="lib/json/json_parse_state.js"></script>
+
+
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular/angular-route.min.js"></script>
+    <script src="lib/angular/angular-sanitize.js"></script>
+    <script src="lib/filesaver/angular-file-saver.bundle.min.js"></script>
+
+    <script src="js/lab/lab.js"></script>
+    <script src="js/lab/lab_controller.js"></script>
+</body>
+</html>
