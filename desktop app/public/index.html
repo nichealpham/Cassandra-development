@@ -1,0 +1,118 @@
+<html ng-app="app" ng-controller="mainController">
+<head>
+  <title>Cassandra Desktop</title>
+  <link rel="stylesheet" type="text/css" href="css/scrollbar.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap_grid.css">
+  <link rel="stylesheet" type="text/css" href="css/global.css">
+
+  <link rel="stylesheet" type="text/css" href="lib/chartist/chartist.css">
+  <link rel="stylesheet" type="text/css" href="lib/font-awesome/font-awesome.min.css">
+</head>
+<body>
+
+    <div id="divLogin" class="main-container" style="width:100vw;height:100vh;position:fixed;color:white;top:0px;left:0px;">
+      <div class="account block" style="width:800px;margin:40px auto;"> <!-- ACCOUNT (RIGHT-CONTAINER) -->
+        <form ng-submit="performLogin()">
+          <h2 class="titular">SIGN IN TO YOUR ACCOUNT</h2>
+          <div class="input-container" style="width:600px;margin-left:80px;">
+              <input ng-model="user_email" required type="text" placeholder="yourname@gmail.com" class="email text-input" style="width:600px;font-size:16px;padding-left:52px;">
+              <div style="margin-top:4px;margin-left:6px;" class="input-icon envelope-icon-acount"><span class="fontawesome-envelope scnd-font-color"></span></div>
+          </div>
+          <div class="input-container" style="width:600px;margin-left:80px;">
+              <input ng-model="user_password" required type="text" placeholder="Password" class="password text-input" style="width:600px;font-size:16px;padding-left:52px;">
+              <div style="margin-top:4px;margin-left:6px;" class="input-icon password-icon"><span class="fontawesome-lock scnd-font-color"></span></div>
+          </div>
+          <button type="submit" class="sign-in button" style="border:none;color:white;cursor:pointer;">SIGN IN</button>
+          <p class="{{displayStyle}}">{{displayText}}</p>
+          <a class="fb-sign-in" href="58">
+              <p><span class="fb-border"><span class="icon zocial-facebook"></span></span>Sign in with Facebook</p>
+          </a>
+        </form>
+      </div>
+    </div>
+    <div id="divMain" class="main-container container-fluid" style="width:100vw;height:100vh;position:fixed;color:white;top:0px;left:0px;display:none;">
+      <header class="block;height:80px;padding-top:4px;">
+          <ul class="header-menu horizontal-list">
+              <li>
+                  <a class="header-menu-tab"><span class="icon entypo-cog scnd-font-color"></span>Devices</a>
+                  <a ng-hide="hide_if_zero(devices)" class="header-menu-number">{{devices.length}}</a>
+              </li>
+              <li>
+                  <a class="header-menu-tab"><span class="icon fontawesome-user scnd-font-color"></span>Doctors</a>
+                  <a ng-hide="hide_if_zero(doctors)" class="header-menu-number">{{doctors.length}}</a>
+              </li>
+              <li>
+                  <a class="header-menu-tab"><span class="icon entypo-bell scnd-font-color"></span>Notifications</a>
+                  <a ng-hide="hide_if_zero(notifications)" class="header-menu-number">{{notifications.length}}</a>
+              </li>
+              <li>
+                  <a class="header-menu-tab"><span class="icon fontawesome-envelope scnd-font-color"></span>Messages</a>
+                  <a ng-hide="hide_if_zero(messages)" class="header-menu-number">{{messages.length}}</a>
+              </li>
+          </ul>
+          <div class="profile-menu" style="cursor:pointer;">
+
+              <div class="profile-picture small-profile-picture">
+                  <img width="40px" alt="Anne Hathaway picture" src="http://upload.wikimedia.org/wikipedia/commons/e/e1/Anne_Hathaway_Face.jpg">
+              </div>
+              <p style="margin-left:10px;">{{userInfo.email}} <a href="#26"><span class="entypo-down-open scnd-font-color"></span></a></p>
+          </div>
+      </header>
+
+      <div style="width:100%;overflow-x:hidden;margin-top:4px;">
+        <div id="leftCollumn" style="margin-left:16px;width:290px;height:600px;" class="block-general">
+          <div class="menu-box block"> <!-- MENU BOX (LEFT-CONTAINER) -->
+              <h2 class="titular">MENU BOX</h2>
+              <ul class="menu-box-menu">
+                  <li>
+                      <a class="menu-box-tab" href="#"><span class="icon fontawesome-envelope scnd-font-color"></span>Dashboard<div class="menu-box-number">24</div></a>
+                  </li>
+                  <li>
+                      <a class="menu-box-tab" href="#laboratory"><span class="icon entypo-paper-plane scnd-font-color"></span>Laboratory<div class="menu-box-number">3</div></a>
+                  </li>
+                  <li>
+                      <a class="menu-box-tab" href="#10"><span class="icon entypo-calendar scnd-font-color"></span>Records<div class="menu-box-number">5</div></a>
+                  </li>
+                  <li>
+                      <a class="menu-box-tab" href="#12"><span class="icon entypo-cog scnd-font-color"></span>Account</a>
+                  </li>
+                  <li>
+                      <a class="menu-box-tab" href="#13"><sapn class="icon entypo-chart-line scnd-font-color"></sapn>Statistics</a>
+                  </li>
+              </ul>
+          </div>
+        </div>
+        <div id="rightCollumn" style="width:calc(100vw - 316px);padding-left:20px;overflow:scoll;overflow-x:hidden;height:calc(100vh - 90px)" class="block-general">
+          <ng-view></ng-view>
+        </div>
+      </div>
+
+
+
+    </div>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script>
+      try {
+          $ = jQuery = module.exports;
+          // If you want module.exports to be empty, uncomment:
+          // module.exports = {};
+      } catch(e) {}
+    </script>
+    <script src="lib/bootstrap/bootstrap.min.js"></script>
+
+    <script src="lib/chartist/chartist.min.js"></script>
+
+    <script src="lib/json/json_parse.js"></script>
+    <script src="lib/json/json2.js"></script>
+    <script src="lib/json/json_parse_state.js"></script>
+
+
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular/angular-route.min.js"></script>
+    <script src="lib/angular/angular-sanitize.js"></script>
+    <script src="lib/filesaver/angular-file-saver.bundle.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+</body>
+</html>
