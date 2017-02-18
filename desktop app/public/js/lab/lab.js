@@ -13,3 +13,32 @@ app.service("printService", function () {
     return: exportProject
   };
 });
+
+app.service ('dsp', function() {
+  this.moving_average = function(span, data) {
+    for (i = 0; i < data.length - span; i++) {
+      var sum = data[i] * 10;
+
+      for (k = 2; k <= span; k++) {
+        sum += data[i + k - 1];
+      };
+      data[i] = Math.floor(sum / (span + 9));
+    };
+    return data;
+  };
+  this.lowpass_filter = function(order, cutoff, fs, data) {
+    var firCalculator = new Fili.firCoeffs();
+
+    // calculate filter coefficients
+    var firFilterCoeffs = firCalculator.lowpass({
+        order: order,
+        Fs: fs,
+        Fc: cutoff
+      });
+
+    // create a filter instance from the calculated coeffs
+    var firFilter = new Fili.FirFilter(filterCoeffs);
+
+    return filter.multiStep(data);
+  };
+});

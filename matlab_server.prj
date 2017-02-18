@@ -1,0 +1,188 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="2771599999" file="E:\Github\Cassandra\matlab_server.prj" location="E:\Github\Cassandra" name="matlab_server" preferred-package-location="E:\Github\Cassandra\matlab_server\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.mps.archive" target-name="Production Server Compiler">
+    <param.appname>matlab_server</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.intermediate>${PROJECT_ROOT}\matlab_server\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\matlab_server\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\matlab_server\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\matlab_server</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.embed.ctf>true</param.embed.ctf>
+    <param.server.ctf>${PROJECT_ROOT}\matlab_server\for_testing\server\matlab_server.ctf</param.server.ctf>
+    <param.server.readme>${PROJECT_ROOT}\matlab_server\for_testing\server\readme.txt</param.server.readme>
+    <param.target.type>subtarget.mads</param.target.type>
+    <param.support.packages />
+    <param.required.mcr.products />
+    <param.classorg />
+    <param.function.data />
+    <param.mads.server.configuration />
+    <param.user.only.registration>false</param.user.only.registration>
+    <param.mps.server.dir>server</param.mps.server.dir>
+    <param.mps.client.dir>client</param.mps.client.dir>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.embed.ctf />
+      <param.server.ctf />
+      <param.server.readme />
+      <param.target.type />
+      <param.support.packages />
+      <param.required.mcr.products />
+      <param.classorg />
+      <param.function.data />
+      <param.mads.server.configuration />
+      <param.user.only.registration />
+      <param.mps.server.dir />
+      <param.mps.client.dir />
+    </unset>
+    <fileset.exports>
+      <file>E:\Github\Thesis\server code\baseline_subtract.m</file>
+      <file>E:\Github\Thesis\server code\bf.m</file>
+      <file>E:\Github\Thesis\server code\calc_lfhf.m</file>
+      <file>E:\Github\Thesis\server code\clean_hrv4.m</file>
+      <file>E:\Github\Thesis\server code\clean_RR_RS.m</file>
+      <file>E:\Github\Thesis\server code\DetrendedFluctuation.m</file>
+      <file>E:\Github\Thesis\server code\down_sample_realistically.m</file>
+      <file>E:\Github\Thesis\server code\ECGfilterTimeAlignedSVD.m</file>
+      <file>E:\Github\Thesis\server code\filterECG128Hz.m</file>
+      <file>E:\Github\Thesis\server code\filterECG256Hz.m</file>
+      <file>E:\Github\Thesis\server code\generate_rr_with_FM.m</file>
+      <file>E:\Github\Thesis\server code\interp_RR.m</file>
+      <file>E:\Github\Thesis\server code\lfhf_sliding_win.m</file>
+      <file>E:\Github\Thesis\server code\localmax.m</file>
+      <file>E:\Github\Thesis\server code\localmax2.m</file>
+      <file>E:\Github\Thesis\server code\lomb.m</file>
+      <file>E:\Github\Thesis\server code\maxjiggle.m</file>
+      <file>E:\Github\Thesis\server code\np_QRSTdetect.m</file>
+      <file>E:\Github\Thesis\server code\pan_tompkin.m</file>
+      <file>E:\Github\Thesis\server code\parabolicfilter.m</file>
+      <file>E:\Github\Thesis\server code\plotWiener.m</file>
+      <file>E:\Github\Thesis\server code\readFDAECGXML.m</file>
+      <file>E:\Github\Thesis\server code\recon_ECG.m</file>
+      <file>E:\Github\Thesis\server code\rms.m</file>
+      <file>E:\Github\Thesis\server code\rpeakdetect.m</file>
+      <file>E:\Github\Thesis\server code\rrextract.m</file>
+      <file>E:\Github\Thesis\server code\SampEn.m</file>
+      <file>E:\Github\Thesis\server code\select_train.m</file>
+      <file>E:\Github\Thesis\server code\snr.m</file>
+      <file>E:\Github\Thesis\server code\sqrs.m</file>
+      <file>E:\Github\Thesis\server code\svdFilter.m</file>
+      <file>E:\Github\Thesis\server code\wabp.m</file>
+      <file>E:\Github\Thesis\server code\wavelet_decompose.m</file>
+      <file>E:\Github\Thesis\server code\wienerFilter.m</file>
+    </fileset.exports>
+    <fileset.classes>
+      <entity.package name="">
+        <entity.class name="Class1">
+          <file>E:\Github\Thesis\server code\baseline_subtract.m</file>
+          <file>E:\Github\Thesis\server code\bf.m</file>
+          <file>E:\Github\Thesis\server code\calc_lfhf.m</file>
+          <file>E:\Github\Thesis\server code\clean_hrv4.m</file>
+          <file>E:\Github\Thesis\server code\clean_RR_RS.m</file>
+          <file>E:\Github\Thesis\server code\DetrendedFluctuation.m</file>
+          <file>E:\Github\Thesis\server code\down_sample_realistically.m</file>
+          <file>E:\Github\Thesis\server code\ECGfilterTimeAlignedSVD.m</file>
+          <file>E:\Github\Thesis\server code\filterECG128Hz.m</file>
+          <file>E:\Github\Thesis\server code\filterECG256Hz.m</file>
+          <file>E:\Github\Thesis\server code\generate_rr_with_FM.m</file>
+          <file>E:\Github\Thesis\server code\interp_RR.m</file>
+          <file>E:\Github\Thesis\server code\lfhf_sliding_win.m</file>
+          <file>E:\Github\Thesis\server code\localmax.m</file>
+          <file>E:\Github\Thesis\server code\localmax2.m</file>
+          <file>E:\Github\Thesis\server code\lomb.m</file>
+          <file>E:\Github\Thesis\server code\maxjiggle.m</file>
+          <file>E:\Github\Thesis\server code\np_QRSTdetect.m</file>
+          <file>E:\Github\Thesis\server code\pan_tompkin.m</file>
+          <file>E:\Github\Thesis\server code\parabolicfilter.m</file>
+          <file>E:\Github\Thesis\server code\plotWiener.m</file>
+          <file>E:\Github\Thesis\server code\readFDAECGXML.m</file>
+          <file>E:\Github\Thesis\server code\recon_ECG.m</file>
+          <file>E:\Github\Thesis\server code\rms.m</file>
+          <file>E:\Github\Thesis\server code\rpeakdetect.m</file>
+          <file>E:\Github\Thesis\server code\rrextract.m</file>
+          <file>E:\Github\Thesis\server code\SampEn.m</file>
+          <file>E:\Github\Thesis\server code\select_train.m</file>
+          <file>E:\Github\Thesis\server code\snr.m</file>
+          <file>E:\Github\Thesis\server code\sqrs.m</file>
+          <file>E:\Github\Thesis\server code\svdFilter.m</file>
+          <file>E:\Github\Thesis\server code\wabp.m</file>
+          <file>E:\Github\Thesis\server code\wavelet_decompose.m</file>
+          <file>E:\Github\Thesis\server code\wienerFilter.m</file>
+        </entity.class>
+      </entity.package>
+    </fileset.classes>
+    <fileset.resources />
+    <fileset.depfun>
+      <file>E:\Github\Thesis\lib\calc_lfhf.m</file>
+      <file>E:\Github\Thesis\lib\mcode\getWfdbClass.m</file>
+      <file>E:\Github\Thesis\lib\mcode\lomb.m</file>
+      <file>E:\Github\Thesis\lib\mcode\wfdbloadlib.m</file>
+      <file>E:\Github\Thesis\lib\wavelet_decompose.m</file>
+    </fileset.depfun>
+    <fileset.package />
+    <fileset.package.server>
+      <file>E:\Github\Thesis\Untitled1\for_testing\server\matlab_server.ctf</file>
+      <file>E:\Github\Thesis\Untitled1\for_testing\server\readme.txt</file>
+    </fileset.package.server>
+    <fileset.package.client />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\matlab_server\for_testing" name="matlab_server.ctf" optional="false">E:\Github\Cassandra\matlab_server\for_testing\matlab_server.ctf</file>
+      <file location="${PROJECT_ROOT}\matlab_server\for_testing" name="readme.txt" optional="true">E:\Github\Cassandra\matlab_server\for_testing\readme.txt</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Nguyen Pham\Matlab R2016a installed files</root>
+      <toolboxes>
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabcoder" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="embeddedcoder" />
+      </toolboxes>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.2</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
