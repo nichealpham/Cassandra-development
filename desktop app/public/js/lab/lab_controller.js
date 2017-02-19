@@ -1,5 +1,5 @@
 var app = angular.module("app")
-.controller("laboratoryController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', 'dsp', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, dsp) {
+.controller("laboratoryController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', 'dsp', 'socket', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, dsp, socket) {
   console.log("laboratory");
 
   var red_code = "#f05b4f";
@@ -26,7 +26,7 @@ var app = angular.module("app")
 
   $scope.data_pointer = 0;
   $scope.chart_pointer = 0;
-  $scope.window_span = 2;           // in seconds
+  $scope.window_span = 2;             // in seconds
   $scope.sampling_frequency = 100;    // 100 points per 1,000ms
   $scope.plot_speed = 40;             // 50 points per 1,000ms
 
@@ -257,15 +257,7 @@ var app = angular.module("app")
     };
     $scope.color_update_interval = null;
   };
-  $scope.chart_update_interval = $interval(function() {
-    if ($scope.data_pointer < $scope.databin.length) {
-      $scope.interval_tasks_handle();
-    } else {
-      // $scope.data_pointer = 0;
-      // $scope.interval_tasks_handle();
-      $scope.stop_all_intervals();
-    };
-  }, $scope.tick_speed);
+
 
   var animate_blinking = function() {
     jQuery(".blinking").animate({
@@ -278,6 +270,11 @@ var app = angular.module("app")
       });
     });
   };
+  var scroll_to_bottom_of_message_box = function() {
+    console.log(jQuery("#div_chat_content").height());
+    jQuery("#div_chat_content").animate({ scrollTop: jQuery(this).height() }, 400);
+  };
+
   animate_blinking();
 
   $scope.update_colors =  function() {
@@ -292,4 +289,40 @@ var app = angular.module("app")
     $scope.health_color = Math.floor(Math.random() * 3);
     $scope.update_colors();
   }, 5000);
+
+  $scope.chat_messages = [];
+
+  socket.on("diag_server-welcome-new-user", function(data) {
+    var chat_message = {
+      name: "Server",
+      style: "color:" + red_code,
+      content: "Hello there, feel free to chat here :)",
+      //content: "Hello",
+      time: new Date()
+    };
+    $scope.chat_messages.push(chat_message);
+  });
+
+  $scope.insert_chat_message = function(content) {
+    var chat_message = {
+      name: "Me",
+      style: "color:" + green_code,
+      content: content,
+      time: new Date()
+    };
+    $scope.chat_messages.push(chat_message);
+    $scope.message_content = "";
+    scroll_to_bottom_of_message_box();
+  };
+
+  $scope.chart_update_interval = $interval(function() {
+    if ($scope.data_pointer < $scope.databin.length) {
+      $scope.interval_tasks_handle();
+    } else {
+      // $scope.data_pointer = 0;
+      // $scope.interval_tasks_handle();
+      $scope.stop_all_intervals();
+    };
+  }, $scope.tick_speed);
+
 }]);

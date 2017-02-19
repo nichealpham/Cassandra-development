@@ -1,5 +1,5 @@
 var app = angular.module("app")
-.controller("mainController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval) {
+.controller("mainController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', 'socket', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, socket) {
 
 var innit_login = function() {
   $scope.displayText = "Forgot Password?";
@@ -79,6 +79,18 @@ $scope.openLaboratory = function() {
   //$location.path("/laboratory");
   $window.open("laboratory.html", "_blank", 'width=1280,height=680');
 };
+
+$scope.chat_messages = [];
+
+socket.on("diag_server-welcome-new-user", function(data) {
+  var chat_messgae = {
+    name: "Server",
+    style: "",
+    content: "Hello",
+    time: new Date()
+  };
+  $scope.chat_messages.push(chat_messgae);
+});
 
 }])
 .controller("personalController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location) {

@@ -96,12 +96,18 @@
               </div>
 
               <div class="block block-general" style=";width:100%;padding-bottom:0px;cursor:pointer;margin-top:-4px;height:calc(100vh - 356px);overflow:hidden;">
-                <div id="div_chat_content" style="height:calc(100vh - 406px);overflow:scroll;overflow-x:hidden;width:100%;padding:10px;">
-
+                <div id="div_chat_content" style="height:calc(100vh - 406px);overflow:scroll;overflow-x:hidden;width:100%;padding:4px 10px 10px 10px;">
+                  <p ng-repeat="message in chat_messages" style="width:100%;float:left;display:inline-block;margin-bottom:-10px;">
+                    <label style="{{message.style}};font-family:Ubuntu;font-size:18px;">{{message.name}}: </label>
+                    <span style="font-size:16px;">{{message.content}}</span>
+                  </p>
                 </div>
                 <div id="div_chat_input" style="height:60px;;width:100%;">
-                  <span class="icon entypo-paper-plane scnd-font-color scnd-font-color" style="position:absolute;margin-top:15px;margin-left:10px;font-size:18px;font-weight:800;"></span>
-                  <input type="text" placeholder="Say something here..." style="width:100%;margin-left:0px;padding:0px 10px 0px 35px;border-radius:4px;">
+                  <form ng-submit="insert_chat_message(message_content)">
+                    <span class="icon entypo-paper-plane scnd-font-color scnd-font-color" style="position:absolute;margin-top:15px;margin-left:10px;font-size:18px;font-weight:800;"></span>
+                    <input ng-model="message_content" type="text" placeholder="Say something here..." style="width:100%;margin-left:0px;padding:0px 10px 0px 35px;border-radius:4px;">
+                    <button type="submit" style="display:none;">Submit</button>
+                  </form>
                 </div>
                 <!-- <div class="block-general" style="height:100px;padding:10px;">
                   <div style="width:100%;">
@@ -136,7 +142,7 @@
     <script src="lib/json/json2.js"></script>
     <script src="lib/json/json_parse_state.js"></script>
 
-
+    <script src="lib/socket-io-client/socket.io.js"></script>
 
     <script src="lib/angular/angular.min.js"></script>
     <script src="lib/angular/angular-route.min.js"></script>
