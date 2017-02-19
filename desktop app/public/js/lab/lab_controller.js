@@ -287,7 +287,7 @@ var app = angular.module("app")
 
   animate_blinking();
 
-  $scope.update_colors =  function() {
+  var update_colors =  function() {
     $scope.heart_rate_color       = $scope.colors_pool[$scope.heart_rate_condition];
     $scope.variability_color      = $scope.colors_pool[$scope.variability_condition];
     $scope.health_color           = $scope.colors_pool[$scope.health_condition];
@@ -339,18 +339,18 @@ var app = angular.module("app")
     $scope.heart_rate = Math.round(dsp.cal_mean(heart_rates));
     if ($scope.heart_rate < 60) {
       $scope.heart_rate_condition = 1;
-      $scope.update_colors();
+      update_colors();
     } else {
       if ($scope.heart_rate < 100) {
         $scope.heart_rate_condition = 0;
-        $scope.update_colors();
+        update_colors();
       } else {
         if ($scope.heart_rate < 120) {
           $scope.heart_rate_condition = 1;
-          $scope.update_colors();
+          update_colors();
         } else {
           $scope.heart_rate_condition = 2;
-          $scope.update_colors();
+          update_colors();
         };
       };
     }
