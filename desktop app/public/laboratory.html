@@ -20,7 +20,7 @@
                 <a class="header-menu-tab"><span class="icon entypo-cog scnd-font-color"></span>Filter Design</a>
             </li>
             <li>
-                <a class="header-menu-tab"><span class="icon fontawesome-user scnd-font-color"></span>Viewers</a>
+                <a class="header-menu-tab"><span class="icon fontawesome-user scnd-font-color"></span>Observers</a>
                 <a ng-hide="hide_if_zero(doctors)" class="header-menu-number">{{viewers.length}}</a>
             </li>
 
@@ -68,14 +68,24 @@
           <div class="col-md-4 col-sm-12 col-xs-12 feature-block" style="padding:0px 0px 0px 10px;min-width:300px;">
             <div class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
               <div class="block-general" style="width:100%;height:90px;padding-bottom:0px;">
-                  <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">VARIABILITY:</h2>
+                <h2 style="margin-top:32px;margin-left:-4px;float:left;display:inline-block;">VARIABILITY (std):</h2>
+                <h2 style="margin-top:16px;margin-left:6px;color:{{variability_color}};font-size:42px;float:left;display:inline-block;">
+                  <span style="color:{{variability_color}};margin-left:6px;">
+                    {{variability}}
+                  </span>
+                </h2>
               </div>
             </div>
           </div>
           <div class="col-md-4 col-sm-12 col-xs-12 feature-block" style="padding:0px 0px 0px 10px;min-width:300px;">
             <div class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
               <div class="block-general" style="width:100%;height:90px;padding-bottom:0px;">
-                  <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">STATUS:</h2>
+                <h2 style="margin-top:32px;margin-left:-4px;float:left;display:inline-block;">STATUS:</h2>
+                <h2 style="margin-top:19px;margin-left:6px;color:{{health_color}};font-size:36px;float:left;display:inline-block;">
+                  <span style="color:{{health_color}};margin-left:6px;">
+                    {{health}}
+                  </span>
+                </h2>
               </div>
             </div>
           </div>
@@ -98,7 +108,7 @@
               <div class="block block-general" style=";width:100%;padding-bottom:0px;cursor:pointer;margin-top:-4px;height:calc(100vh - 356px);overflow:hidden;">
                 <div id="div_chat_content" style="height:calc(100vh - 406px);overflow:scroll;overflow-x:hidden;width:100%;padding:4px 10px 10px 10px;">
                   <p ng-repeat="message in chat_messages" style="width:100%;float:left;display:inline-block;margin-bottom:-10px;">
-                    <label style="{{message.style}};font-family:Ubuntu;font-size:18px;">{{message.name}}: </label>
+                    <span style="{{message.style}};font-size:16px;font-weight:700;">{{message.name}}: </span>
                     <span style="font-size:16px;">{{message.content}}</span>
                   </p>
                 </div>
@@ -109,12 +119,6 @@
                     <button type="submit" style="display:none;">Submit</button>
                   </form>
                 </div>
-                <!-- <div class="block-general" style="height:100px;padding:10px;">
-                  <div style="width:100%;">
-                      <input type="text" placeholder="yourname@gmail.com" class="email text-input">
-                      <div class="input-icon envelope-icon-acount"><span class="fontawesome-envelope scnd-font-color"></span></div>
-                  </div>
-                </div> -->
               </div>
 
           </div>

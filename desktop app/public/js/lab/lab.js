@@ -15,7 +15,7 @@ app.service("printService", function () {
 });
 
 app.service ('dsp', function() {
-  this.moving_average = function(span, data, scale) {
+  this.moving_average = function(span, scale, data) {
     if (scale == null) {
       scale = 1;
     };
@@ -129,6 +129,40 @@ app.service ('dsp', function() {
       hrs.push(hr);
     };
     return hrs;
+  };
+  this.find_max = function(data) {
+    var max = data[0];
+    for (i = 0; i < data.length; i++) {
+      if (data[i] > max) {
+        max = data[i];
+      };
+    };
+    return max;
+  };
+  this.find_min = function(data) {
+    var min = data[0];
+    for (i = 0; i < data.length; i++) {
+      if (data[i] < min) {
+        min = data[i];
+      };
+    };
+    return min;
+  };
+  this.perform_normalization = function(data) {
+    var result = [];
+    var min = this.find_min(data);
+    if (min < 0) {
+      var value_to_add = -min;
+      for (i = 0; i < data.length; i++) {
+        result.push(data[i] + value_to_add);
+      };
+    };
+    // Normalize here
+    var max = this.find_max(result);
+    for (i = 0; i < result.length; i++) {
+      result[i] = Math.floor(result[i] / max * 1000);
+    };
+    return result;
   };
 });
 
