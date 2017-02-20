@@ -16,16 +16,21 @@ app.service("printService", function () {
 
 app.service ('dsp', function() {
   this.moving_average = function(span, scale, data) {
+    var output = [];
     if (scale == null) {
       scale = 1;
     };
     for (i = 0; i < data.length - span; i++) {
       var sum = data[i] * scale;
-
       for (k = 2; k <= span; k++) {
         sum += data[i + k - 1];
       };
-      data[i] = Math.floor(sum / (span + scale - 1));
+      var result = Math.floor(sum / (span + scale - 1));
+      if (result) {
+        output.push(result);
+      } else {
+        output.push(null);
+      };
     };
     return data;
   };
@@ -47,6 +52,12 @@ app.service ('dsp', function() {
   };
   this.magnify_maximum = function(data, baseline, power) {
     var new_data = [];
+    if (baseline == null) {
+      baseline = 250;
+    };
+    if (power == null) {
+      power = 4;
+    };
     for (i = 1; i < data.length - 1; i++) {
       if ((data[i] > data[i - 1]) && (data[i] > data[i + 1])) {
         var value = Math.pow((Math.pow(data[i] - data[i - 1], power) + Math.pow(data[i] - data[i + 1], power)), 1 / power)  + baseline;
@@ -59,18 +70,28 @@ app.service ('dsp', function() {
   };
   this.cal_mean = function(data) {
     var sum = 0;
+    var deduce = 0;
     for (i = 0; i < data.length; i++) {
-      sum += data[i];
+      if (data[i]) {
+        sum += data[i];
+      } else {
+        deduce += 1;
+      };
     };
-    return sum / data.length;
+    return sum / (data.length - deduce);
   };
   this.cal_std = function(data) {
     var mean = this.cal_mean(data);
     var sum_of_sqrt = 0;
+    var deduce = 0;
     for (i = 0; i < data.length; i++) {
-      sum_of_sqrt += Math.pow(data[i] - mean, 2);
+      if (data[i]) {
+        sum_of_sqrt += Math.pow(data[i] - mean, 2);
+      } else {
+        deduce += 1;
+      };
     };
-    return Math.sqrt(sum_of_sqrt / (data.length - 1));
+    return Math.sqrt(sum_of_sqrt / (data.length - deduce - 1));
   };
   this.find_peaks = function(data, min_peak_value, min_peak_distance) {
     var peak_locs = [];
@@ -104,7 +125,7 @@ app.service ('dsp', function() {
     return peak_locs;
   };
   this.calculate_heart_rates = function(fs, data, baseline, power) {
-    var max_hr_hz = 2.5;          // around 180 bpm
+    var max_hr_hz = 3;          // around 180 bpm
     if (baseline == null) {
       baseline = 250;
     };
@@ -152,7 +173,7 @@ app.service ('dsp', function() {
     var result = [];
     var min = this.find_min(data);
     if (min < 0) {
-      var value_to_add = -min;
+      var value_to_add = - min;
       for (i = 0; i < data.length; i++) {
         result.push(data[i] + value_to_add);
       };
@@ -161,6 +182,13 @@ app.service ('dsp', function() {
     var max = this.find_max(result);
     for (i = 0; i < result.length; i++) {
       result[i] = Math.floor(result[i] / max * 1000);
+    };
+    return result;
+  };
+  this.create_threshold = function(points, value) {
+    var result = [];
+    for (i = 0; i < points; i++) {
+      result.push(value);
     };
     return result;
   };

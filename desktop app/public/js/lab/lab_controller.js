@@ -1,10 +1,9 @@
 var app = angular.module("app")
-.controller("laboratoryController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', 'dsp', 'socket', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, dsp, socket) {
+.controller("laboratoryController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', 'dsp', 'socket', '$timeout', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, dsp, socket, $timeout) {
   console.log("laboratory");
 
   var red_code = "#f05b4f";
   var orange_code = "#d17905";
-  //var green_code = "#4CAF50";
   var green_code = "#8BC34A";
 
   if ($window.localStorage["cassandra_userInfo"]) {
@@ -21,7 +20,7 @@ var app = angular.module("app")
     };
   });
 
-  $scope.status_pool = ["Normal Sinus",   "Bradycardia",  "Tarchycardia", "Atrial Fribilation", "Arryhtmia", "Ischemia", "Myocardial Infarction", "Arystole"];
+  $scope.status_pool = ["Normal", "Brady", "Tarchy", "AF", "Arryth", "Ische", "Stroke", "Aryst"];
   $scope.colors_pool = [green_code, orange_code, red_code];
 
   var initiate_variables = function() {
@@ -42,7 +41,7 @@ var app = angular.module("app")
     $scope.plot_speed = 40;             // 50 points per 1,000ms
     $scope.tick_speed = Math.floor(1000 / $scope.plot_speed);
     $scope.chart_pointer = 0;
-    $scope.window_span = 2;             // in seconds
+    $scope.window_span = 3;             // in seconds
     $scope.window_leng = $scope.plot_speed * $scope.window_span;
   };
 
@@ -147,6 +146,8 @@ var app = angular.module("app")
 
   ecg_bin = preprocess_signal([10, 1500], 2, null, ecg_bin);
 
+  // ecg_bin = dsp.magnify_maximum(ecg_bin);
+
   var random_data = function(number_of_point, scale) {
     var data = [];
     for (i = 0; i < number_of_point; i++) {
@@ -181,6 +182,7 @@ var app = angular.module("app")
   var chart_data = {
     series: [
       random_data($scope.window_leng, 800),
+      //dsp.create_threshold($scope.window_leng, dsp.cal_mean(ecg_bin) + 1.5 * dsp.cal_std(ecg_bin)),
     ]
   };
   var hrv_data = [];
@@ -220,7 +222,13 @@ var app = angular.module("app")
       chart_data.series[0][index] = value;
       chart_data.series[0][index + 1] = null;
     } else {
+      // When reaching the end of the window_leng
+      // update the value
       chart_data.series[0][index] = value;
+      // Then perform diagnosis
+      heart_rate_interval_tasks_handle();
+      variability_interval_tasks_handle();
+      health_interval_tasks_handle();
       chart_data.series[0][0] = null;
     };
 
@@ -228,7 +236,7 @@ var app = angular.module("app")
 
   $scope.initiateChart();
 
-  $scope.interval_tasks_handle = function() {
+  var chart_update_interval_tasks_handle = function() {
     var value = ecg_bin[$scope.data_pointer];
 
     if ($scope.chart_pointer == $scope.window_leng) {
@@ -241,7 +249,7 @@ var app = angular.module("app")
     $scope.data_pointer += 1;
     $scope.chart_pointer += 1;
   };
-  $scope.stop_all_intervals = function() {
+  var stop_all_intervals_and_timeouts = function() {
 
     // chart draw interval
     if ($scope.chart_update_interval != null) {
@@ -266,8 +274,13 @@ var app = angular.module("app")
       $interval.cancel($scope.health_interval);
     };
     $scope.health_interval = null;
-  };
 
+    // chart update timeout interval
+    if ($scope.chart_update_timeout != null) {
+      $timeout.cancel($scope.chart_update_timeout);
+    };
+    $scope.chart_update_timeout = null;
+  };
 
   var animate_blinking = function() {
     jQuery(".blinking").animate({
@@ -318,17 +331,19 @@ var app = angular.module("app")
     scroll_to_bottom_of_message_box();
   };
 
+
   $scope.chart_update_interval = $interval(function() {
     if ($scope.data_pointer < ecg_bin.length) {
-      $scope.interval_tasks_handle();
+      chart_update_interval_tasks_handle();
     } else {
       // $scope.data_pointer = 0;
-      // $scope.interval_tasks_handle();
-      $scope.stop_all_intervals();
+      // chart_update_interval_tasks_handle();
+      stop_all_intervals_and_timeouts();
     };
   }, $scope.tick_speed);
 
-  $scope.heart_rate_interval = $interval(function() {
+
+  var heart_rate_interval_tasks_handle = function() {
     var fs   = 50;
     var data = chart_data.series[0];
     var heart_rates = dsp.calculate_heart_rates(fs, data);
@@ -353,19 +368,17 @@ var app = angular.module("app")
           update_colors();
         };
       };
-    }
-
-  }, 2000);
-
-  $scope.variability_interval = $interval(function () {
+    };
+  };
+  var variability_interval_tasks_handle = function() {
     var value = dsp.cal_std(hrv_data);
     value = (Math.floor(value * 100) / 100).toFixed(2);
     hrvh_data.push(value);
     $scope.variability = value;
-    if (value < 15) {
+    if (value < 20) {
       $scope.variability_condition = 0;
     } else {
-      if (value < 30) {
+      if (value < 40) {
         $scope.variability_condition = 1;
       } else {
         $scope.variability_condition = 2;
@@ -373,9 +386,8 @@ var app = angular.module("app")
     }
     update_colors();
     hrv_data = [];
-  }, 6000);
-
-  $scope.health_interval = $interval(function () {
+  };
+  var health_interval_tasks_handle = function() {
     var mean_hr = dsp.cal_mean(hrh_data);
     var mean_hrv = dsp.cal_mean(hrvh_data);
     if (mean_hr > 120) {
@@ -399,6 +411,25 @@ var app = angular.module("app")
         };
       };
     };
-  }, 6000);
+  };
 
+  var using_intervals_to_diagnose = function(hr, vari, heal) {
+    if (hr) {
+      $scope.heart_rate_interval = $interval(function() {
+        heart_rate_interval_tasks_handle();
+      }, hr);
+    };
+    if (vari) {
+      $scope.variability_interval = $interval(function () {
+        variability_interval_tasks_handle();
+      }, vari);
+    };
+    if (heal) {
+      $scope.health_interval = $interval(function () {
+        health_interval_tasks_handle();
+      }, heal);
+    };
+  };
+
+  //using_intervals_to_diagnose(2000, 2000, 2000);
 }]);

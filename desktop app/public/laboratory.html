@@ -105,13 +105,16 @@
                 </div>
               </div>
 
-              <div class="block block-general" style=";width:100%;padding-bottom:0px;cursor:pointer;margin-top:-4px;height:calc(100vh - 356px);overflow:hidden;">
-                <div id="div_chat_content" style="height:calc(100vh - 406px);overflow:scroll;overflow-x:hidden;width:100%;padding:4px 10px 10px 10px;">
-                  <p ng-repeat="message in chat_messages" style="width:100%;float:left;display:inline-block;margin-bottom:-10px;">
-                    <span style="{{message.style}};font-size:16px;font-weight:700;">{{message.name}}: </span>
-                    <span style="font-size:16px;">{{message.content}}</span>
-                  </p>
+              <div class="block block-general" style=";width:100%;padding-bottom:0px;cursor:pointer;margin-top:-4px;height:calc(100vh - 356px);overflow:hidden;padding:0px;">
+                <div style="height:calc(100vh - 406px);width:100%;padding:10px 6px 10px 10px;width:100%;overflow:hidden;">
+                  <div id="div_chat_content" style="height:100%;overflow:scroll;overflow-x:hidden;width:100%;">
+                    <p ng-repeat="message in chat_messages" style="width:100%;float:left;display:inline-block;margin:0px;">
+                      <span style="{{message.style}};font-size:16px;font-weight:700;">{{message.name}}: </span>
+                      <span style="font-size:16px;">{{message.content}}</span>
+                    </p>
+                  </div>
                 </div>
+
                 <div id="div_chat_input" style="height:60px;;width:100%;">
                   <form ng-submit="insert_chat_message(message_content)">
                     <span class="icon entypo-paper-plane scnd-font-color scnd-font-color" style="position:absolute;margin-top:15px;margin-left:10px;font-size:18px;font-weight:800;"></span>
