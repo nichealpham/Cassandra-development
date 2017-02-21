@@ -20,21 +20,30 @@ var app = angular.module("app")
     };
   });
 
-  $scope.status_pool = ["Normal", "Brady", "Tarchy", "AF", "Arryth", "Ische", "Stroke", "Aryst"];
-  $scope.colors_pool = [green_code, orange_code, red_code];
+  $scope.status_pool = ["Normal", "Brady", "Tarchy", "AF", "Arryth", "Ische", "Stroke", "Deadly"];
+  var colors_pool = [green_code, orange_code, red_code];
 
   var initiate_variables = function() {
     $scope.data_pointer = 0;
     $scope.sampling_frequency = 100;    // 100 points per 1,000ms
+
     $scope.heart_rate = "---";
     $scope.variability = "---";
+    $scope.tmag = "---";
+    $scope.std_val = "---";
     $scope.health = "-----";
+
     $scope.heart_rate_condition = 0;
     $scope.variability_condition = 0;
     $scope.health_condition = 0;
-    $scope.heart_rate_color       = $scope.colors_pool[$scope.heart_rate_condition];
-    $scope.variability_color      = $scope.colors_pool[$scope.variability_condition];
-    $scope.health_color           = $scope.colors_pool[$scope.heart_rate_condition];
+    $scope.tmag_condition = 0;
+    $scope.std_condition = 0;
+
+    $scope.heart_rate_color       = colors_pool[$scope.heart_rate_condition];
+    $scope.variability_color      = colors_pool[$scope.variability_condition];
+    $scope.health_color           = colors_pool[$scope.health_condition];
+    $scope.tmag_color             = colors_pool[$scope.tmag_condition];
+    $scope.std_color              = colors_pool[$scope.std_condition];
   };
 
   var initiate_window_settings = function() {
@@ -155,7 +164,6 @@ var app = angular.module("app")
     };
     return data;
   };
-
   var create_chart_options = function(x_axis_ops, y_axis_ops) {
     var obj = {
       showPoint: false,
@@ -191,7 +199,7 @@ var app = angular.module("app")
 
   $scope.initiateChart = function() {
     $scope.chart = new Chartist.Line('.ct-chart', chart_data, create_chart_options([true, false], [true, true]));
-    $scope.chart_fecg = new Chartist.Line('.fecg-chart', chart_data, create_chart_options([false, false], [false, false]));
+    // $scope.chart_fecg = new Chartist.Line('.fecg-chart', chart_data, create_chart_options([false, false], [false, false]));
     // $scope.chart.on('draw', function(context) {
     //   // First we want to make sure that only do something when the draw event is for bars. Draw events do get fired for labels and grids too.
     //   if(context.type === 'line') {
@@ -215,7 +223,7 @@ var app = angular.module("app")
   };
   $scope.updateChart = function(chart_data) {
     $scope.chart.update(chart_data);
-    $scope.chart_fecg.update(chart_data);
+    // $scope.chart_fecg.update(chart_data);
   };
   $scope.updateChartData = function(index, value) {
     if (index < $scope.window_leng - 2) {
@@ -226,12 +234,15 @@ var app = angular.module("app")
       // update the value
       chart_data.series[0][index] = value;
       // Then perform diagnosis
+      var t0 = performance.now();
       heart_rate_interval_tasks_handle();
       variability_interval_tasks_handle();
       health_interval_tasks_handle();
+      t_and_std_interval_tasks_handle();
       chart_data.series[0][0] = null;
+      var t1 = performance.now();
+      console.log(Math.floor((t1 - t0) * 100) / 100 + "ms");
     };
-
   };
 
   $scope.initiateChart();
@@ -301,9 +312,11 @@ var app = angular.module("app")
   animate_blinking();
 
   var update_colors =  function() {
-    $scope.heart_rate_color       = $scope.colors_pool[$scope.heart_rate_condition];
-    $scope.variability_color      = $scope.colors_pool[$scope.variability_condition];
-    $scope.health_color           = $scope.colors_pool[$scope.health_condition];
+    $scope.heart_rate_color       = colors_pool[$scope.heart_rate_condition];
+    $scope.variability_color      = colors_pool[$scope.variability_condition];
+    $scope.health_color           = colors_pool[$scope.health_condition];
+    $scope.tmag_color             = colors_pool[$scope.tmag_condition];
+    $scope.std_color              = colors_pool[$scope.std_condition];
   };
 
   $scope.chat_messages = [];
@@ -330,7 +343,6 @@ var app = angular.module("app")
     $scope.message_content = "";
     scroll_to_bottom_of_message_box();
   };
-
 
   $scope.chart_update_interval = $interval(function() {
     if ($scope.data_pointer < ecg_bin.length) {
@@ -411,6 +423,43 @@ var app = angular.module("app")
         };
       };
     };
+    hrh_data = [];
+    hrvh_data = [];
+  };
+  var t_and_std_interval_tasks_handle = function() {
+    var fs   = 50;
+    var data = chart_data.series[0];
+    var qrs_locs = dsp.qrs_detect(fs, data);
+    var result = dsp.t_peaks_detect(fs, data, qrs_locs);
+    // var result = dsp.t_peaks_detect(fs, data);
+    t_peaks = result[0];
+    t_locs = result[1];
+    var std_result = dsp.std_detect(fs, data, qrs_locs, t_locs);
+    var t_peak = Math.round(dsp.cal_mean(t_peaks));
+    var std_val = Math.round(dsp.cal_mean(std_result));
+    // Handle t peak
+    $scope.tmag = t_peak;
+    if (t_peak < -10) {
+      $scope.tmag_condition = 2;
+    } else {
+      if (t_peak > 110) {
+        $scope.tmag_condition = 1;
+      } else {
+        $scope.tmag_condition = 0;
+      };
+    };
+    // Hanlde std value
+    $scope.std_val = std_val;
+    if (std_val < -5) {
+      $scope.std_condition = 1;
+    } else {
+      if (std_val > 50) {
+        $scope.std_condition = 2;
+      } else {
+        $scope.std_condition = 0;
+      };
+    };
+    update_colors();
   };
 
   var using_intervals_to_diagnose = function(hr, vari, heal) {

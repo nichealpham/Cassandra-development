@@ -93,6 +93,24 @@ app.service ('dsp', function() {
     };
     return Math.sqrt(sum_of_sqrt / (data.length - deduce - 1));
   };
+  this.find_max = function(data) {
+    var max = data[0];
+    for (i = 0; i < data.length; i++) {
+      if (data[i] > max) {
+        max = data[i];
+      };
+    };
+    return max;
+  };
+  this.find_min = function(data) {
+    var min = data[0];
+    for (i = 0; i < data.length; i++) {
+      if (data[i] < min) {
+        min = data[i];
+      };
+    };
+    return min;
+  };
   this.find_peaks = function(data, min_peak_value, min_peak_distance) {
     var peak_locs = [];
     for (i = 1; i < data.length - 1; i++) {
@@ -124,51 +142,6 @@ app.service ('dsp', function() {
     };
     return peak_locs;
   };
-  this.calculate_heart_rates = function(fs, data, baseline, power) {
-    var max_hr_hz = 3;          // around 180 bpm
-    if (baseline == null) {
-      baseline = 250;
-    };
-    if (power == null) {
-      power = 4;
-    };
-    var hrs = [];
-    data2 = this.magnify_maximum(data, baseline, power);
-    data2 = data;
-    var min_peak_value = this.cal_mean(data2) + 1.5 * this.cal_std(data2);
-    var min_peak_distance = Math.floor(1 / max_hr_hz * fs);
-    try {
-      var qrs_locs = this.find_peaks(data2, min_peak_value, min_peak_distance);
-    } catch(err) {
-      return "---";
-    };
-    if (qrs_locs.length <= 1) {
-      return "---";
-    };
-    for (i = 0; i < qrs_locs.length - 1; i++) {
-      var hr = Math.floor(60 / ((qrs_locs[i + 1] - qrs_locs[i])  / fs));
-      hrs.push(hr);
-    };
-    return hrs;
-  };
-  this.find_max = function(data) {
-    var max = data[0];
-    for (i = 0; i < data.length; i++) {
-      if (data[i] > max) {
-        max = data[i];
-      };
-    };
-    return max;
-  };
-  this.find_min = function(data) {
-    var min = data[0];
-    for (i = 0; i < data.length; i++) {
-      if (data[i] < min) {
-        min = data[i];
-      };
-    };
-    return min;
-  };
   this.perform_normalization = function(data) {
     var result = [];
     var min = this.find_min(data);
@@ -191,6 +164,112 @@ app.service ('dsp', function() {
       result.push(value);
     };
     return result;
+  };
+  this.qrs_detect = function(fs, data, baseline, power) {
+    var max_hr_hz = 3;          // around 180 bpm
+    if (baseline == null) {
+      baseline = 250;
+    };
+    if (power == null) {
+      power = 4;
+    };
+    data2 = this.magnify_maximum(data, baseline, power);
+    var min_peak_value = this.cal_mean(data2) + 1.5 * this.cal_std(data2);
+    var min_peak_distance = Math.floor(1 / max_hr_hz * fs);
+    try {
+      var qrs_locs = this.find_peaks(data2, min_peak_value, min_peak_distance);
+    } catch(err) {
+      return null;
+    };
+    return qrs_locs;
+  };
+  this.t_peaks_detect = function(fs, ecg_data, qrs_locs, baseline, power) {
+    if (baseline == null) {
+      baseline = 250;
+    };
+    if (power == null) {
+      power = 4;
+    };
+    if (qrs_locs == null) {
+      qrs_locs = this.qrs_detect(fs, ecg_data, baseline, power);
+    };
+    var t_peaks = [];
+    var t_locs = [];
+    for (var hk = 0; hk < qrs_locs.length - 1; hk++) {
+      var qrs = ecg_data[qrs_locs[hk]];
+      var qrs_leng = qrs_locs[hk + 1] - qrs_locs[hk];
+      var step = qrs_leng;
+      step = Math.ceil(step / 2);
+      step += qrs_locs[hk];
+      var iso = ecg_data[step];
+      var qrs_amplitude = Math.abs(qrs - iso) + 250;   // 250 is the baseline
+      var segment = [];
+      var index_to_start  = Math.floor(0.15 * qrs_leng) + qrs_locs[hk];
+      var index_to_end    = Math.floor(0.5 * qrs_leng) + qrs_locs[hk];
+      for (var lm = index_to_start; lm < index_to_end; lm++) {
+        var value = ecg_data[lm] - iso;
+        segment.push(Math.abs(value));
+      };
+      var t_amplitude = this.find_max(segment);
+      var t_loc = segment.indexOf(t_amplitude) + index_to_start;
+      t_peaks.push(Math.floor(t_amplitude / qrs_amplitude * 100));
+      t_locs.push(t_loc);
+    };
+    return [t_peaks, t_locs];
+  };
+  this.std_detect = function(fs, ecg_data, qrs_locs, t_locs, baseline, power) {
+    if (baseline == null) {
+      baseline = 250;
+    };
+    if (power == null) {
+      power = 4;
+    };
+    if (qrs_locs == null) {
+      qrs_locs = this.qrs_detect(fs, ecg_data, baseline, power);
+    };
+    if (t_locs == null) {
+      var ohyeah = this.t_peaks_detect(fs, ecg_data, qrs_locs, baseline, power);
+      t_locs = ohyeah[1];
+    };
+    var std_bin = [];
+    for (var hk = 0; hk < t_locs.length; hk++) {
+      var std = 0;
+      var rt_length = t_locs[hk] - qrs_locs[hk];
+      var st_index_start = Math.ceil(rt_length / 3) + qrs_locs[hk];
+      var st_index_end = Math.ceil(rt_length / 3 * 2) + qrs_locs[hk];
+      var iso_index = Math.ceil((qrs_locs[hk] + qrs_locs[hk + 1]) / 2);
+      var iso = ecg_data[iso_index];
+      var qrs_amplitude = Math.abs(ecg_data[qrs_locs[hk]] - iso) + 250;
+
+      for (var lm = st_index_start; lm < st_index_end; lm++) {
+        std += (ecg_data[lm] - iso);
+      };
+      std = std / (st_index_end - st_index_start);
+      std = Math.floor(std / qrs_amplitude * 100);
+      std_bin.push(std);
+    };
+    return std_bin;
+  };
+
+  this.calculate_heart_rates = function(fs, ecg_data, qrs_locs, baseline, power) {
+    var hrs = [];
+    if (baseline == null) {
+      baseline = 250;
+    };
+    if (power == null) {
+      power = 4;
+    };
+    if (ecg_data != null && qrs_locs == null) {
+      qrs_locs = this.qrs_detect(fs, ecg_data, baseline, power);
+    };
+    if (qrs_locs.length <= 1) {
+      return "---";
+    };
+    for (i = 0; i < qrs_locs.length - 1; i++) {
+      var hr = Math.floor(60 / ((qrs_locs[i + 1] - qrs_locs[i])  / fs));
+      hrs.push(hr);
+    };
+    return hrs;
   };
 });
 

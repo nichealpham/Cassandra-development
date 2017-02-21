@@ -93,15 +93,25 @@
         <div class="block-general col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding:0px 0px 0px 10px;">
           <div class="menu-box block" style="height:auto;padding-bottom:0px;"> <!-- MENU BOX (LEFT-CONTAINER) -->
 
-              <div ng-click="open_ecg_chart()" class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;">
-                <div class="fecg-chart block-general" style="width:100%;height:90px;padding-bottom:0px;">
-                    <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">ECG1:</h2>
+              <div class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;">
+                <div class="block-general" style="width:100%;height:90px;padding-bottom:0px;">
+                  <h2 style="margin-top:32px;margin-left:-3px;float:left;display:inline-block;">T PEAK MAG(%):</h2>
+                  <h2 style="margin-top:19px;margin-left:6px;color:{{tmag_color}};font-size:36px;float:left;display:inline-block;">
+                    <span style="color:{{tmag_color}};margin-left:6px;">
+                      {{tmag}}%
+                    </span>
+                  </h2>
                 </div>
               </div>
 
-              <div ng-click="open_hrv_chart()" class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
-                <div class="fhrv-chart block-general" style="width:100%;height:90px;padding-bottom:0px;">
-                    <h2 style="position:absolute;margin-top:32px;margin-left:-4px;">ECG2:</h2>
+              <div class="block block-general" style="width:100%;padding:10px;padding-bottom:0px;cursor:pointer;margin-top:-4px;">
+                <div class="block-general" style="width:100%;height:90px;padding-bottom:0px;">
+                  <h2 style="margin-top:32px;margin-left:-3px;float:left;display:inline-block;">ST DEVIATE (%):</h2>
+                  <h2 style="margin-top:19px;margin-left:6px;color:{{tmag_color}};font-size:36px;float:left;display:inline-block;">
+                    <span style="color:{{std_color}};margin-left:6px;">
+                      {{std_val}}%
+                    </span>
+                  </h2>
                 </div>
               </div>
 
