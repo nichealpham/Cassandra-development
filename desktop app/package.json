@@ -27,7 +27,8 @@
     "express": "^4.14.1",
     "cookie-parser": "^1.4.3",
     "body-parser": "^1.16.1",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "fs": "^0.0.1"
   },
   "dependencies": {
     "electron": "^1.4.1",
@@ -35,6 +36,7 @@
     "express": "^4.14.1",
     "cookie-parser": "^1.4.3",
     "body-parser": "^1.16.1",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "fs": "^0.0.1"
   }
 }

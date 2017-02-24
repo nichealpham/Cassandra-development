@@ -144,17 +144,17 @@ app.service ('dsp', function() {
   };
   this.perform_normalization = function(data) {
     var result = [];
-    var min = this.find_min(data);
-    if (min < 0) {
-      var value_to_add = - min;
-      for (i = 0; i < data.length; i++) {
-        result.push(data[i] + value_to_add);
+    var min_value = this.find_min(data);
+    if (min_value < 0) {
+      var value_to_add = Math.abs(min_value);
+      for (norm_1 = 0; norm_1 < data.length; norm_1++) {
+        result.push(data[norm_1] + value_to_add);
       };
     };
     // Normalize here
-    var max = this.find_max(result);
-    for (i = 0; i < result.length; i++) {
-      result[i] = Math.floor(result[i] / max * 1000);
+    var max_value = this.find_max(result);
+    for (norm_2 = 0; norm_2 < result.length; norm_2++) {
+      result[norm_2] = Math.floor(result[norm_2] / max_value * 1000);
     };
     return result;
   };
@@ -183,6 +183,7 @@ app.service ('dsp', function() {
     };
     return qrs_locs;
   };
+
   this.t_peaks_detect = function(fs, ecg_data, qrs_locs, baseline, power) {
     if (baseline == null) {
       baseline = 250;
@@ -210,8 +211,9 @@ app.service ('dsp', function() {
         var value = ecg_data[lm] - iso;
         segment.push(Math.abs(value));
       };
-      var t_amplitude = this.find_max(segment);
-      var t_loc = segment.indexOf(t_amplitude) + index_to_start;
+      var t_amplitude_abs = this.find_max(segment);
+      var t_loc = segment.indexOf(t_amplitude_abs) + index_to_start;
+      var t_amplitude = ecg_data[t_loc] - iso;
       t_peaks.push(Math.floor(t_amplitude / qrs_amplitude * 100));
       t_locs.push(t_loc);
     };
