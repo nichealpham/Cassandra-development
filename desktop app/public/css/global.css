@@ -1134,3 +1134,14 @@ h1, h2, p, a, span{
 						background: #e64c65;
 						border-radius: 100%;
 					}
+
+
+          .e_health_text_block {
+            display:inline-block;float:left;height:46px;line-height:46px;font-size:16px;font-weight: bold;background-color: transparent;
+          }
+          .e_health_input_block {
+            display:inline-block;float:left;height:46px;line-height: 46px;font-size: 16px;font-weight: bold;background-color: transparent;
+          }
+          .e_health_input_block input {
+            display:inline-block;float:left;height:46px;width:100%;padding-left:10px;padding-right:10px;font-size: 15px;
+          }

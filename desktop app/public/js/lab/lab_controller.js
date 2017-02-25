@@ -271,7 +271,7 @@ var app = angular.module("app")
   var ecg_bin;
   $http({
     method: "GET",
-    url: "http://localhost:2000/saved-records/Tinv.txt"
+    url: "http://localhost:2000/saved-records/small_STD.txt"
   }).then(function successCallback(response) {
     ecg_bin = response.data.split('\n');
     $scope.sampling_frequency = ecg_bin[0];

@@ -3,10 +3,13 @@
   <title>Cassandra Desktop</title>
   <link rel="stylesheet" type="text/css" href="css/scrollbar.css">
   <link rel="stylesheet" type="text/css" href="css/bootstrap_grid.css">
+  <link rel="stylesheet" type="text/css" href="css/check-box-material.css">
   <link rel="stylesheet" type="text/css" href="css/global.css">
+
 
   <link rel="stylesheet" type="text/css" href="lib/chartist/chartist.css">
   <link rel="stylesheet" type="text/css" href="lib/font-awesome/font-awesome.min.css">
+
 </head>
 <body>
 
@@ -65,19 +68,19 @@
               <h2 class="titular">MENU BOX</h2>
               <ul class="menu-box-menu">
                   <li>
-                      <a class="menu-box-tab" href="#"><span class="icon fontawesome-envelope scnd-font-color"></span>Dashboard<div class="menu-box-number">24</div></a>
+                      <a class="menu-box-tab" href="#"><span class="icon fontawesome-envelope scnd-font-color"></span>My Dashboard<div class="menu-box-number">24</div></a>
                   </li>
                   <li>
-                      <a ng-click="openLaboratory()" class="menu-box-tab"><span class="icon entypo-paper-plane scnd-font-color"></span>Laboratory<div class="menu-box-number">3</div></a>
+                      <a ng-click="openLaboratory()" class="menu-box-tab"><span class="icon entypo-paper-plane scnd-font-color"></span>Diagnosis Laboratory<div class="menu-box-number">3</div></a>
                   </li>
                   <li>
-                      <a class="menu-box-tab" href="#10"><span class="icon entypo-calendar scnd-font-color"></span>Records<div class="menu-box-number">5</div></a>
+                      <a class="menu-box-tab" href="#10"><span class="icon entypo-calendar scnd-font-color"></span>Saved Records<div class="menu-box-number">5</div></a>
                   </li>
                   <li>
-                      <a class="menu-box-tab" href="#12"><span class="icon entypo-cog scnd-font-color"></span>Account</a>
+                      <a class="menu-box-tab" href="#personal"><span class="icon entypo-cog scnd-font-color"></span>User Information</a>
                   </li>
                   <li>
-                      <a class="menu-box-tab" href="#13"><sapn class="icon entypo-chart-line scnd-font-color"></sapn>Statistics</a>
+                      <a class="menu-box-tab" href="#13"><sapn class="icon entypo-chart-line scnd-font-color"></sapn>Health Statistics</a>
                   </li>
               </ul>
           </div>
@@ -98,6 +101,7 @@
           // module.exports = {};
       } catch(e) {}
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_Y3yHjREUC56Jj2wr-4LtAN5KOv2NJ84"></script>
     <script src="lib/bootstrap/bootstrap.min.js"></script>
 
     <script src="lib/chartist/chartist.min.js"></script>
