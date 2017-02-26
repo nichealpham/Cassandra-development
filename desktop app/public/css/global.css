@@ -102,6 +102,12 @@ h1, h2, p, a, span{
 .input-container {
 	position: relative;
 }
+.record_block {
+  display: inline-block;
+  float: left;
+  min-height: 160px;
+  padding: 10px;
+}
 	input[type=text]{
 		width: 260px;
 		height: 50px;
@@ -245,7 +251,7 @@ h1, h2, p, a, span{
   color: steelblue;
 }
 .collumn-padding {
-  padding: 0px 12px 0px 0px;
+  padding: 0px 10px 0px 0px;
 }
 /** MAIN CONTAINER **/
 .block-general {
@@ -376,6 +382,23 @@ h1, h2, p, a, span{
 			background: #394264;
 			border-radius: 5px;
 		}
+    .record-block {
+        padding: 10px;
+        min-height: 120px;
+        height: auto;
+        background: #394264;
+  			border-radius: 5px;
+        transition: background-color 0.6s;
+    }
+    /*.record-block:hover {
+      background-color: #607D8B;
+    }*/
+    .hover_cam {
+      transition: background-color 0.4s;
+    }
+    .hover_cam:hover {
+      background-color: rgb(252,177,80);
+    }
 		/******************************************** LEFT CONTAINER *****************************************/
 		.left-container {}
 			.menu-box {

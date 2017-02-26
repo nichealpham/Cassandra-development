@@ -14,9 +14,9 @@ app.config(function ($routeProvider) {
       templateUrl: "templates/personalTemplate.html",
       controller: "personalController"
     })
-    .when("/medication", {
-      templateUrl: "templates/medicationTemplate.html",
-      controller: "medicationController"
+    .when("/records", {
+      templateUrl: "templates/recordsTemplate.html",
+      controller: "recordsController"
     })
     .otherwise(
       { redirectTo: "/"}

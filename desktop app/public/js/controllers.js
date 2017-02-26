@@ -170,4 +170,129 @@ var app = angular.module("app")
   $scope.test = function() {
     console.log($scope.ehealth.clinical_symptoms.dizziness);
   }
+}])
+.controller("recordsController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', 'socket', '$timeout', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, socket, $timeout) {
+  $scope.init_chart = function(normal, risk, danger) {
+    var chart = new Chartist.Pie('.ct-chart', {
+      series: [normal, risk, danger],
+      labels: ["Normal", "Risk", "Danger"]
+    }, {
+      donut: true,
+      donutWidth: 42,
+      startAngle: 340,
+      showLabel: false
+    });
+    chart.on('draw', function(data) {
+      if(data.type === 'slice') {
+        // Get the total path length in order to use for dash array animation
+        var pathLength = data.element._node.getTotalLength();
+
+        // Set a dasharray that matches the path length as prerequisite to animate dashoffset
+        data.element.attr({
+          'stroke-dasharray': pathLength + 'px ' + pathLength + 'px'
+        });
+
+        // Create animation definition while also assigning an ID to the animation for later sync usage
+        var animationDefinition = {
+          'stroke-dashoffset': {
+            id: 'anim' + data.index,
+            dur: 1200,
+            from: -pathLength + 'px',
+            to:  '0px',
+            easing: Chartist.Svg.Easing.easeOutQuint,
+            // We need to use `fill: 'freeze'` otherwise our animation will fall back to initial (not visible)
+            fill: 'freeze'
+          }
+        };
+
+        // If this was not the first slice, we need to time the animation so that it uses the end sync event of the previous animation
+        if(data.index !== 0) {
+          animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
+        }
+
+        // We need to set an initial value before the animation starts as we are not in guided mode which would do that for us
+        data.element.attr({
+          'stroke-dashoffset': -pathLength + 'px'
+        });
+
+        // We can't use guided mode as the animations need to rely on setting begin manually
+        // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
+        data.element.animate(animationDefinition, false);
+      }
+    });
+
+    // For the sake of the example we update the chart every time it's created with a delay of 8 seconds
+    chart.on('created', function() {
+      if(window.__anim21278907124) {
+        clearTimeout(window.__anim21278907124);
+        window.__anim21278907124 = null;
+      }
+
+    });
+  };
+  if ($window.localStorage["cassandra_records"]) {
+    $scope.records = JSON.parse($window.localStorage["cassandra_records"]);
+  } else {
+    $scope.records = [
+      {
+        name: "T wave inverted",
+        date: new Date(),
+        fs: 360,
+        dur: 60,
+        data_link: "http://localhost:2000/saved-records/Tinv.txt",
+        description: "1 minute stress test",
+        clinical_symptoms: {
+          chest_pain: false,
+          shortness_of_breath: true,
+          severe_sweating: true,
+          dizziness: false,
+        },
+        statistics: [0, 90, 10],
+        send_to_doctor: false
+      },
+      {
+        name: "Small ST deviation",
+        date: new Date(),
+        data_link: "http://localhost:2000/saved-records/small_STD.txt",
+        description: "1 minutes of dizziness and sweating",
+        clinical_symptoms: {
+          chest_pain: false,
+          shortness_of_breath: false,
+          severe_sweating: true,
+          dizziness: true,
+        },
+        statistics: [80, 20, 0],
+        send_to_doctor: false
+      },
+    ];
+  };
+  $scope.last_index = $scope.records.length - 1;
+  var last_record_id = $scope.records.length - 1;
+  $scope.selected_record = $scope.records[last_record_id];
+  $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
+  $scope.cancel_all_timeouts_and_intervals = function() {
+    if ($scope.hover_record_timeout) {
+      $timeout.cancel($scope.hover_record_timeout);
+      $scope.hover_record_timeout = null;
+    };
+  };
+  $scope.display_record_statistics = function(index) {
+    if (index !== $scope.last_index) {
+      $scope.last_index = index;
+      index = $scope.records.length - 1 - index;
+      $scope.hover_record_timeout = $timeout(function() {
+
+        $scope.selected_record = $scope.records[index];
+        $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
+        $scope.cancel_all_timeouts_and_intervals();
+      }, 600);
+    };
+  };
+
+  $scope.view_this_signal = function(index) {
+    index = $scope.records.length - 1 - index;
+    $window.localStorage["cassandra_command_lab_to_run_this_signal"] = $scope.records[index].data_link;
+    $window.open("laboratory.html", "_blank", 'width=1280,height=680');
+    console.log("Location to record");
+  };
 }]);
