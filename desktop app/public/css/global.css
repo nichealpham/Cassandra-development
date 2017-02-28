@@ -384,20 +384,55 @@ h1, h2, p, a, span{
 		}
     .record-block {
         padding: 10px;
-        min-height: 120px;
+        min-height: 186px;
         height: auto;
         background: #394264;
-  			border-radius: 5px;
-        transition: background-color 0.6s;
+  			border-radius: 4px;
+        border: 2px solid transparent;
+        transition: border 0.4s;
+        margin-bottom: 12px;
     }
-    /*.record-block:hover {
-      background-color: #607D8B;
-    }*/
-    .hover_cam {
-      transition: background-color 0.4s;
+    .record-block:hover {
+      border: 2px solid rgb(40,156,244);
     }
-    .hover_cam:hover {
-      background-color: rgb(252,177,80);
+    .normal_color {
+      color: rgb(17,168,171);
+    }
+    .caution_color {
+      color: rgb(252,177,80);
+    }
+    .danger_color {
+      color: rgb(230,76,101);
+    }
+    .block-text_color {
+      color: rgb(114,128,149);
+    }
+    .highlight_color {
+      color: rgb(40,156,244);
+    }
+    .grey_color {
+      color: #E0E0E0;
+    }
+    .white_color {
+      color: white;
+    }
+    .hover_normal {
+      transition: color 0.4s;
+    }
+    .hover_normal:hover {
+      color: rgb(17,168,171);
+    }
+    .hover_caution {
+      transition: color 0.4s;
+    }
+    .hover_caution:hover {
+      color: rgb(252,177,80);
+    }
+    .hover_danger {
+      transition: color 0.4s;
+    }
+    .hover_danger:hover {
+      color: rgb(230,76,101);
     }
 		/******************************************** LEFT CONTAINER *****************************************/
 		.left-container {}

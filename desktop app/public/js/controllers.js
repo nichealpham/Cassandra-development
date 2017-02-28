@@ -77,7 +77,7 @@ var app = angular.module("app")
   };
   $scope.openLaboratory = function() {
     //$location.path("/laboratory");
-    $window.open("laboratory.html", "_blank", 'width=1280,height=680');
+    $window.open("laboratory.html", "_blank", 'width=1260,height=640');
   };
 
   $scope.chat_messages = [];
@@ -196,7 +196,7 @@ var app = angular.module("app")
         var animationDefinition = {
           'stroke-dashoffset': {
             id: 'anim' + data.index,
-            dur: 1200,
+            dur: 900,
             from: -pathLength + 'px',
             to:  '0px',
             easing: Chartist.Svg.Easing.easeOutQuint,
@@ -226,10 +226,12 @@ var app = angular.module("app")
       if(window.__anim21278907124) {
         clearTimeout(window.__anim21278907124);
         window.__anim21278907124 = null;
-      }
+      };
 
     });
   };
+  $scope.timer = 0;
+  $scope.selected_index = -1;
   if ($window.localStorage["cassandra_records"]) {
     $scope.records = JSON.parse($window.localStorage["cassandra_records"]);
   } else {
@@ -264,35 +266,99 @@ var app = angular.module("app")
         statistics: [80, 20, 0],
         send_to_doctor: false
       },
+      {
+        name: "Healthy ECG",
+        date: new Date(),
+        data_link: "http://localhost:2000/saved-records/healthy_ECG.txt",
+        description: "My 1 minute ECG while relaxing and watching movies",
+        clinical_symptoms: {
+          chest_pain: false,
+          shortness_of_breath: false,
+          severe_sweating: false,
+          dizziness: false,
+        },
+        statistics: [100, 0, 0],
+        send_to_doctor: false
+      },
+      {
+        name: "Transient T peaked",
+        date: new Date(),
+        data_link: "http://localhost:2000/saved-records/transient_T_peak.txt",
+        description: "My 1 minute ECG data during treadmill test",
+        clinical_symptoms: {
+          chest_pain: false,
+          shortness_of_breath: false,
+          severe_sweating: false,
+          dizziness: false,
+        },
+        statistics: [30, 60, 10],
+        send_to_doctor: false
+      },
+      {
+        name: "Suspected NSTEMI",
+        date: new Date(),
+        data_link: "http://localhost:2000/saved-records/suspected_NSTEMI.txt",
+        description: "Hard to breath at night",
+        clinical_symptoms: {
+          chest_pain: true,
+          shortness_of_breath: true,
+          severe_sweating: true,
+          dizziness: false,
+        },
+        statistics: [10, 40, 50],
+        send_to_doctor: false
+      },
     ];
   };
-  $scope.last_index = $scope.records.length - 1;
-  var last_record_id = $scope.records.length - 1;
-  $scope.selected_record = $scope.records[last_record_id];
-  $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
+  // $scope.last_index = $scope.records.length - 1;
+  // var last_record_id = $scope.records.length - 1;
+  // $scope.selected_record = $scope.records[last_record_id];
+  // $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
+  $scope.selected_record = {
+    name: "No records hovered",
+    statistics: [0, 0, 0],
+  };
   $scope.cancel_all_timeouts_and_intervals = function() {
     if ($scope.hover_record_timeout) {
       $timeout.cancel($scope.hover_record_timeout);
       $scope.hover_record_timeout = null;
     };
-  };
-  $scope.display_record_statistics = function(index) {
-    if (index !== $scope.last_index) {
-      $scope.last_index = index;
-      index = $scope.records.length - 1 - index;
-      $scope.hover_record_timeout = $timeout(function() {
-
-        $scope.selected_record = $scope.records[index];
-        $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
-        $scope.cancel_all_timeouts_and_intervals();
-      }, 600);
+    if ($scope.timer_interval) {
+      $interval.cancel($scope.timer_interval);
+      $scope.timer_interval = null;
     };
   };
-
+  $scope.display_record_statistics = function(index) {
+      $scope.timer = 1;
+      $scope.timer_interval = $interval(function() {
+        if ($scope.timer > 0) {
+          $scope.timer += 1;
+        };
+        if ($scope.timer == 6) {
+          if ($scope.selected_index >= 0) {
+            if (index != $scope.selected_index) {
+              $scope.selected_record = $scope.records[index];
+              $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
+              $scope.cancel_all_timeouts_and_intervals();
+              $scope.selected_index = index;
+            }
+          } else {
+            $scope.selected_record = $scope.records[index];
+            $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
+            $scope.cancel_all_timeouts_and_intervals();
+            $scope.selected_index = index;
+          }
+        };
+      }, 160);
+  };
+  $scope.mouse_leave_this_record = function() {
+    $scope.timer = 0;
+    $scope.cancel_all_timeouts_and_intervals();
+  };
   $scope.view_this_signal = function(index) {
-    index = $scope.records.length - 1 - index;
+    // index = $scope.records.length - 1 - index;
     $window.localStorage["cassandra_command_lab_to_run_this_signal"] = $scope.records[index].data_link;
-    $window.open("laboratory.html", "_blank", 'width=1280,height=680');
+    $window.open("laboratory.html", "_blank", 'width=1260,height=640');
     console.log("Location to record");
   };
 }]);

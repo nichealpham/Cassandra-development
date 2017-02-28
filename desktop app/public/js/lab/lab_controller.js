@@ -50,7 +50,7 @@ var app = angular.module("app")
     $scope.plot_speed = 40;             // 50 points per 1,000ms
     $scope.tick_speed = Math.floor(1000 / $scope.plot_speed);
     $scope.chart_pointer = 0;
-    $scope.window_span = 3;             // in seconds
+    $scope.window_span = 4;             // in seconds
     $scope.window_leng = $scope.plot_speed * $scope.window_span;
   };
   var preprocess_signal = function(smooth_options, down_sampling_value, should_normalized, data) {
@@ -137,46 +137,55 @@ var app = angular.module("app")
     if (std < -30 && tp < -20) {
       $scope.health_condition = 2;
       $scope.health = "NSTEMI";
+      // $scope.health = "Danger";
       return;
     };
-    if (std > -30 && std < 30 && tp < -20) {
+    if (std > -20 && std < 20 && tp < -20) {
       $scope.health_condition = 1;
-      $scope.health = "Ischemia";
+      $scope.health = "T inverted";
+      // $scope.health = "Caution";
       return;
     };
-    if (std > -30 && std < 30 && tp > 90) {
+    if (std > -20 && std < 20 && tp > 140) {
       $scope.health_condition = 1;
-      $scope.health = "Ischemia";
+      $scope.health = "T peaked";
+      // $scope.health = "Caution";
       return;
     };
-    if (std < -50) {
+    if (std < -20) {
       $scope.health_condition = 1;
       $scope.health = "ST Depress";
+      // $scope.health = "Caution";
       return;
     };
     if (std > 50) {
       $scope.health_condition = 2;
       $scope.health = "STEMI";
+      // $scope.health = "Danger";
       return;
     };
     if (hrv > 50 && hr > 110) {
       $scope.health_condition = 1;
       $scope.health = "PVC";
+      // $scope.health = "Caution";
       return;
     };
-    if (hrv > 40) {
+    if (hrv > 30) {
       $scope.health_condition = 1;
       $scope.health = "Arrythmia";
+      // $scope.health = "Caution";
       return;
     };
     if (hr > 120) {
       $scope.health_condition = 1;
       $scope.health = "Tarchy";
+      // $scope.health = "Caution";
       return;
     };
     if (hr < 50) {
       $scope.health_condition = 1;
       $scope.health = "Brady";
+      // $scope.health = "Caution";
       return;
     };
     $scope.health_condition = 0;
@@ -205,6 +214,7 @@ var app = angular.module("app")
       };
       ecg_bin = preprocess_signal([10, 1500], $scope.down_sampling_value, null, ecg_bin);
       // ecg_bin = dsp.magnify_maximum(ecg_bin);
+      // console.log(dsp.cal_std(ecg_bin) + dsp.cal_mean(ecg_bin));
       $scope.initiateChart(dsp.find_max(ecg_bin), dsp.find_min(ecg_bin));
     }, function errorCallback(response) {
       alert("No entry found!");
