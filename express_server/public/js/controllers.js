@@ -5,7 +5,7 @@ var app = angular.module("app")
     $scope.dialog = "no action fired yet.";
     $scope.debugObj;
 
-
+    socket.emit("what_the_funck", "This is a ping");
     // Core variables
     var bin = [];
     var fbin = [];
