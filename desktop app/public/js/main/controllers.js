@@ -77,7 +77,7 @@ var app = angular.module("app")
   };
   $scope.openLaboratory = function() {
     //$location.path("/laboratory");
-    $window.open("laboratory.html", "_blank", 'width=1260,height=640');
+    $window.open("laboratory.html", "_blank", 'width=1280,height=720');
   };
 
   $scope.chat_messages = [];
@@ -493,7 +493,7 @@ var app = angular.module("app")
   $scope.view_this_signal = function(index) {
     // index = $scope.records.length - 1 - index;
     $window.localStorage["cassandra_command_lab_to_run_this_signal"] = $scope.records[index].data_link;
-    $window.open("laboratory.html", "_blank", 'width=1260,height=640');
+    $window.open("laboratory.html", "_blank", 'width=1280,height=720');
   };
   $scope.delete_this_record = function(index) {
     if (confirm("Delete record ?")) {
