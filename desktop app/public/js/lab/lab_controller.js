@@ -3,7 +3,15 @@ var app = angular.module("app")
 .controller("laboratoryController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', 'dsp', '$timeout', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, dsp, $timeout) {
 
   console.log("laboratory");
+  jQuery("#upload_record_popup").hide();
 
+  $scope.ecg_data = [];
+  $scope.file_content = [];
+  $scope.record_name = "";
+  $scope.record_comment = "";
+  $scope.record_sampling_frequency = 100;
+  $scope.record_duration = Math.floor($scope.file_content.length / ($scope.record_sampling_frequency) * 10) / 10;
+  $scope.record_date = new Date();
 
   $scope.local_server = {
     name: "Local server",
@@ -202,7 +210,7 @@ var app = angular.module("app")
       // $scope.health = "Caution";
       return;
     };
-    if (std < -26) {
+    if (std < -20) {
       $scope.health_condition = 1;
       $scope.statistics_count[1] += 1;
       $scope.health = "ST Deviate";
@@ -237,6 +245,12 @@ var app = angular.module("app")
       // $scope.health = "Caution";
       return;
     };
+    if (tp > -20 && tp < 2) {
+      $scope.health_condition = 1;
+      $scope.statistics_count[1] += 1;
+      $scope.health = "T Absence";
+      return;
+    };
     $scope.health_condition = 0;
     $scope.statistics_count[0] += 1;
     $scope.health = "Normal";
@@ -259,12 +273,29 @@ var app = angular.module("app")
       ecg_storage = ecg_bin;
       if ($scope.sampling_frequency > 40) {
         $scope.down_sampling_value = Math.floor($scope.sampling_frequency / $scope.plot_speed);
+        // Signal preprocessing
+        // Scale up for easy calculation
         for (i = 0; i < ecg_bin.length; i ++) {
           ecg_bin[i] = ecg_bin[i] * 1000;
         };
-        var value = Math.abs(dsp.find_min(ecg_bin));
+        // Scale above 0
+        var value = dsp.find_min(ecg_bin);
+        if (value < 0) {
+          for (i = 0; i < ecg_bin.length; i ++) {
+            ecg_bin[i] = ecg_bin[i] + Math.abs(value);
+          };
+        } else {
+          ecg_bin[i] = ecg_bin[i] - value;
+        };
+        // Scale about mean
+        var value = dsp.cal_mean(ecg_bin);
         for (i = 0; i < ecg_bin.length; i ++) {
-          ecg_bin[i] = ecg_bin[i] + value;
+          ecg_bin[i] = ecg_bin[i] - value;
+        };
+        // Normalize from -1000 to 1000
+        var value = dsp.find_max(ecg_bin);
+        for (i = 0; i < ecg_bin.length; i ++) {
+          ecg_bin[i] = Math.floor(ecg_bin[i] / value * 1000);
         };
         ecg_bin = preprocess_signal([10, 1500], $scope.down_sampling_value, null, ecg_bin);
         var chart_max_value = dsp.find_max(ecg_bin);
@@ -279,37 +310,6 @@ var app = angular.module("app")
     }, function errorCallback(response) {
       alert("No entry found!");
     });
-    // socket.emit("get_this_record_from_server", $scope.link);
-    // socket.on("server_retrieve_and_send_back_this_record", function(response) {
-    //   ecg_bin = response;
-    //   console.log(ecg_bin);
-    //   $scope.sampling_frequency = ecg_bin[0];
-    //   ecg_bin.splice(0, 1);
-    //   if ($scope.sampling_frequency > 40) {
-    //     $scope.down_sampling_value = $scope.sampling_frequency / $scope.plot_speed;
-    //     for (i = 0; i < ecg_bin.length; i ++) {
-    //       ecg_bin[i] = ecg_bin[i] * 1000;
-    //     };
-    //     var value = Math.abs(dsp.find_min(ecg_bin));
-    //     for (i = 0; i < ecg_bin.length; i ++) {
-    //       ecg_bin[i] = ecg_bin[i] + value;
-    //     };
-    //     ecg_bin = preprocess_signal([10, 1500], $scope.down_sampling_value, null, ecg_bin);
-    //     var chart_max_value = dsp.find_max(ecg_bin);
-    //     var chart_min_value = dsp.find_min(ecg_bin);
-    //     $scope.initiateChart(chart_max_value, chart_min_value);
-    //   } else {
-    //     // ecg_bin = dsp.magnify_maximum(ecg_bin);
-    //     // console.log(dsp.cal_std(ecg_bin) + dsp.cal_mean(ecg_bin));
-    //     var chart_max_value = dsp.find_max(ecg_bin);
-    //     chart_max_value = chart_max_value * 1.4;
-    //     var chart_min_value = dsp.find_min(ecg_bin);
-    //     $scope.initiateChart(chart_max_value, chart_min_value);
-    //   };
-    // });
-    // socket.on("get_this_record_from_server_failed", function(err) {
-    //   alert("Read record failed!");
-    // });
   } else {
     ecg_bin = [226,335,224,312,225,303,241,263,282,228,439,585,397,33,161,179,315,229,336,
       235,334,245,334,272,293,343,267,376,283,285,408,273,330,252,203,200,148,189,133,201,145,208,
@@ -605,13 +605,18 @@ var app = angular.module("app")
     // End of healthcare bin
     // Handle t peak
     $scope.tmag = t_peak;
-    if (t_peak < -10) {
+    if (t_peak < -20) {
       $scope.tmag_condition = 2;
     } else {
       if (t_peak > 110) {
         $scope.tmag_condition = 1;
       } else {
-        $scope.tmag_condition = 0;
+        if (t_peak > -20 && t_peak < 2) {
+          $scope.tmag_condition = 1;
+        } else {
+          $scope.tmag_condition = 0;
+        }
+
       };
     };
     // Hanlde std value
@@ -694,7 +699,9 @@ var app = angular.module("app")
   });
 
   socket.on("save_record_to_server_successed", function(response) {
+    $scope.close_popup_upload_record();
     alert("Record saved successfully!");
+
   });
 
   var transform_statistics = function(array) {
@@ -704,17 +711,75 @@ var app = angular.module("app")
     array[2] = 100 - array[0] - array[1];
     return array;
   };
+
+  $scope.importPackageFromTextFile = function($fileContent) {
+    var result = [];
+    var lines = $fileContent.split('\n');
+    for(var line = 0; line < lines.length; line++) {
+      result.push(lines[line]);
+    };
+    if ($scope.file_content.length > 0) {
+      $scope.file_content = $scope.file_content.concat($fileContent);
+      $scope.ecg_data = $scope.ecg_data.concat(result);
+    } else {
+      $scope.file_content = $fileContent;
+      $scope.ecg_data = result;
+    };
+    $scope.update_ecg_data_and_duration();
+  };
+  $scope.update_duration = function() {
+    $scope.record_duration = Math.floor($scope.ecg_data.length / ($scope.record_sampling_frequency) * 10) / 10;
+  };
+
+  $scope.update_ecg_data_and_duration = function() {
+    var result = [];
+    var lines = $scope.file_content.split('\n');
+    for(var line = 0; line < lines.length; line++) {
+      result.push(lines[line]);
+    };
+    $scope.ecg_data = result;
+    $scope.record_duration = Math.floor($scope.ecg_data.length / ($scope.record_sampling_frequency) * 10) / 10;
+  };
+
+  $scope.open_popup_upload_record = function() {
+    $scope.ecg_data = ecg_storage;
+    var text_output_to_area = "";
+    for (var loop = 0; loop < $scope.ecg_data.length; loop++) {
+      text_output_to_area = text_output_to_area + $scope.ecg_data[loop] / 1000 + "\n";
+    };
+    $scope.file_content = text_output_to_area;
+    $scope.update_duration();
+    jQuery("#upload_record_popup").show();
+    jQuery("#upload_record_popup > form > .div_small_popup").animate({
+      top: 100,
+      opacity: 1
+    }, 400);
+  };
+
+  $scope.close_popup_upload_record = function() {
+    $scope.file_content = [];
+    $scope.record_name = "";
+    $scope.record_comment = "";
+    $scope.record_sampling_frequency = 100;
+    $scope.record_duration = Math.floor($scope.file_content.length / ($scope.record_sampling_frequency) * 10) / 10;
+    $scope.record_date = new Date();
+    jQuery("#upload_record_popup > form > .div_small_popup").animate({
+      top: 140,
+      opacity: 0
+    }, 400, function() {
+      jQuery("#upload_record_popup").hide();
+    });
+  };
+
   $scope.save_this_record = function() {
     for (var loop = 0; loop < ecg_storage.length; loop++) {
       ecg_storage[loop] = ecg_storage[loop] / 1000;
     };
-    $scope.record_name = "Normal and healthy ECG";
-    $scope.record_description = "My ECG while resting with some light coffee and music";
     $scope.new_record = {
       name: $scope.record_name,
-      date: new Date(),
+      date: $scope.record_date,
       data_link: $scope.local_server.link + "\\bin\\saved-records\\" + $scope.record_name.split(' ').join('_') + ".txt",
-      description: $scope.record_description,
+      description: $scope.record_comment,
       clinical_symptoms: {
         chest_pain: false,
         shortness_of_breath: false,
@@ -724,7 +789,7 @@ var app = angular.module("app")
       statistics: transform_statistics($scope.statistics_count),
       send_to_doctor: false,
       record_data: {
-        sampling_frequency: $scope.sampling_frequency,
+        sampling_frequency: $scope.record_sampling_frequency,
         data: ecg_storage
       }
     };

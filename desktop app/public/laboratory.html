@@ -9,7 +9,85 @@
   <link rel="stylesheet" type="text/css" href="lib/font-awesome/font-awesome.min.css">
 </head>
 <body style="overflow:hidden;">
+  <div class="div_nen_den" style="" id="upload_record_popup">
+    <form ng-submit="save_this_record()">
+      <div class="div_small_popup" style="border:3px solid black;top:140px;border-radius:0px;opacity:0;">
+          <div class="header">
+            <h2 style="">SAVE THIS RECORD</h2>
+            <label ng-click="close_popup_upload_record()" class="record-block-quiter grey_color" style="font-size:24px;top:11px;right:6px;">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </label>
+          </div>
+          <div class="body">
 
+              <div class="collum" style="width:34%;border-right:3px solid black;padding:14px;">
+
+
+                <span style="width:100%;display:inline-block;float:left;text-align:center;margin-top:18px;">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right:3px;font-size:13px;"></i>
+                  ECG data:
+                </span>
+                <textarea disabled required class="sub-section" style="height:232px;margin-top:18px;" ng-model="file_content"></textarea>
+                <span style="width:100%;display:inline-block;float:left;text-align:left;margin:16px 0px;font-size:13px;padding-left:2px;">
+                  <i class="fa fa-file-o" aria-hidden="true" style="margin-right:2px;"></i>
+                  Total: {{ecg_data.length | number}} rows
+                </span>
+              </div>
+              <div class="collum" style="width:66%;border-right:0px solid black;padding:2px 14px 14px 14px;">
+                <div class="collum" style="width:80%;float:left;">
+                  <span style="width:100%;display:inline-block;float:left;text-align:left;margin:13px 0px;font-size:16px;padding-left:2px;">
+                    <i class="fa fa fa-key" aria-hidden="true" style="margin-right:2px;"></i>
+                    Record name:
+                  </span>
+                  <input required type="text" class="sub-section" placeholder="Record name..." ng-model="record_name" style="width:calc(100% - 26px);">
+                </div>
+                <div class="collum" style="width:20%;float:left;padding:0px;margin-left:-30px;">
+                  <span style="width:100%;display:inline-block;float:left;text-align:left;margin:13px 0px;font-size:16px;padding-left:2px;">
+                    <i class="fa fa-calendar-o" aria-hidden="true" style="margin-right:2px;"></i>
+                    Date:
+                  </span>
+                  <input required type="text" class="sub-section" placeholder="Record name..." ng-model="record_date" value="{{record_date | date}}" style="width:120px;">
+                </div>
+                <div class="collum" style="width:100%;float:left;margin-top:-8px;padding-right:4px;">
+                  <span style="width:100%;display:inline-block;float:left;text-align:left;margin:13px 0px;font-size:16px;padding-left:2px;">
+                    <i class="fa fa fa-pencil" aria-hidden="true" style="margin-right:2px;"></i>
+                    Comments:
+                  </span>
+                  <input required type="text" class="sub-section" placeholder="Record comments..." ng-model="record_comment" style="width:100%;">
+                </div>
+                <div class="collum" style="width:80%;float:left;margin-top:-8px;">
+                  <span style="width:100%;display:inline-block;float:left;text-align:left;margin:13px 0px;font-size:16px;padding-left:2px;">
+                    <i class="fa fa fa-key" aria-hidden="true" style="margin-right:2px;"></i>
+                    Sampling frequency:
+                  </span>
+                  <input required ng-change="update_duration()" type="text" class="sub-section" placeholder="Hz..." ng-model="record_sampling_frequency" style="width:calc(100% - 26px);">
+                </div>
+                <div class="collum" style="width:20%;float:left;padding:0px;margin-left:-30px;margin-top:-8px;">
+                  <span style="width:100%;display:inline-block;float:left;text-align:left;margin:13px 0px;font-size:16px;padding-left:2px;">
+                    <i class="fa fa-clock-o" aria-hidden="true" style="margin-right:2px;"></i>
+                    Duration:
+                  </span>
+                  <input required type="text" class="sub-section" placeholder="sec..." ng-model="record_duration" value="{{record_duration | number}}" style="width:120px;">
+                </div>
+                <div class="collum" style="width:100%;float:left;margin-top:6px;">
+                  <div class="my-card" style=";margin-left:6px;height:46px;background-color:transparent;float:right;width:100%;">
+                    <button type="submit" class="sign-in button" style="border:none;color:white;cursor:pointer;height:46px;margin-top:2px;border-radius:2px;line-height:36px;font-size:15px;width:200px;float:right;margin-left:12px;">
+                      <i class="fa fa-cloud-upload" aria-hidden="true" style="margin-right:2px;"></i>
+                      Upload now
+                    </button>
+                    <button ng-click="close_popup_upload_record()" class="sign-in button cancel-btn" style="">
+                      <i class="fa fa-time" aria-hidden="true" style="margin-right:2px;"></i>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+      </div>
+    </form>
+
+  </div>
     <div id="divMain" class="main-container container-fluid" style="width:100vw;height:100vh;position:fixed;color:white;top:0px;left:0px;padding-bottom:0px;">
       <header style="z-index:1;height:80px;padding-top:4px;background-color:rgba(31,37,61,0.6);position:fixed;top:0px;border-radius:0px;" class="block col-md-12 hidden-sm hidden-xs">
           <ul class="header-menu horizontal-list">
@@ -36,8 +114,8 @@
               <p style="margin-left:10px;">{{userInfo.email}} <a href="#26"><span class="entypo-down-open scnd-font-color"></span></a></p>
           </div> -->
           <ul class="header-menu horizontal-list" style="float:right;">
-              <li ng-click="save_this_record()">
-                  <a class="header-menu-tab"><span class="icon entypo-cog scnd-font-color"></span>Save & Export</a>
+              <li ng-click="open_popup_upload_record()">
+                  <a class="header-menu-tab"><span class="icon entypo-cog scnd-font-color"></span>Save This Record</a>
               </li>
           </ul>
       </header>

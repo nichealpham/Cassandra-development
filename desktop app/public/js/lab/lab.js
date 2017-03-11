@@ -171,7 +171,7 @@ app.service ('dsp', function() {
       baseline = 250;
     };
     if (power == null) {
-      power = 4;
+      power = 5;
     };
     data2 = this.magnify_maximum(data, baseline, power);
     var min_peak_value = this.cal_mean(data2) + 1.5 * this.cal_std(data2);
@@ -189,7 +189,7 @@ app.service ('dsp', function() {
       baseline = 250;
     };
     if (power == null) {
-      power = 4;
+      power = 5;
     };
     if (qrs_locs == null) {
       qrs_locs = this.qrs_detect(fs, ecg_data, baseline, power);
@@ -203,7 +203,7 @@ app.service ('dsp', function() {
       step = Math.ceil(step / 2);
       step += qrs_locs[hk];
       var iso = ecg_data[step];
-      var qrs_amplitude = Math.abs(qrs - iso) + 250;   // 250 is the baseline
+      var qrs_amplitude = Math.abs(qrs - iso) + baseline;
       var segment = [];
       var index_to_start  = Math.floor(0.15 * qrs_leng) + qrs_locs[hk];
       var index_to_end    = Math.floor(0.5 * qrs_leng) + qrs_locs[hk];
@@ -228,7 +228,7 @@ app.service ('dsp', function() {
       baseline = 250;
     };
     if (power == null) {
-      power = 4;
+      power = 5;
     };
     if (qrs_locs == null) {
       qrs_locs = this.qrs_detect(fs, ecg_data, baseline, power);
@@ -245,7 +245,7 @@ app.service ('dsp', function() {
       var st_index_end = Math.ceil(rt_length / 3 * 2) + qrs_locs[hk];
       var iso_index = Math.ceil((qrs_locs[hk] + qrs_locs[hk + 1]) / 2);
       var iso = ecg_data[iso_index];
-      var qrs_amplitude = Math.abs(ecg_data[qrs_locs[hk]] - iso) + 250;
+      var qrs_amplitude = Math.abs(ecg_data[qrs_locs[hk]] - iso) + baseline;
 
       for (var lm = st_index_start; lm < st_index_end; lm++) {
         std += (ecg_data[lm] - iso);
