@@ -392,6 +392,136 @@ h1, h2, p, a, span{
         transition: border 0.4s;
         margin-bottom: 11px;
     }
+    .my-card {
+      background-color: rgb(57,66,100);
+      border-radius: 3px;
+      display: inline-block;
+      float: left;
+    }
+    .section-button {
+      width: 47px;
+      float: left;
+      display: inline-block;
+      border: none;
+      background-color: transparent;
+      border-right: 3px solid rgb(31,37,61);
+      height: 46px;
+      color: white;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: background-color 0.4s;
+
+    }
+    .div_small_popup > .body > .collum > .collum > .my-card > .cancel-btn {
+      transition: background-color 0.4s;
+      background-color: #BDBDBD;
+      border:none;color:white;cursor:pointer;height:46px;margin-top:2px;border-radius:2px;line-height:36px;font-size:15px;width:120px;float:right;color:#424242;
+    }
+    .div_small_popup > .body > .collum > .collum > .my-card > .cancel-btn:hover {
+      background-color: #E0E0E0;
+    }
+    .div_nen_den {
+      background-color: rgba(0,0,0,0.2);
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      margin: 0px;padding: 0px;
+      z-index: 1000;
+      display: inline-block;
+      top:0px;left:0px;
+      font-family: 'entypo', sans-serif;
+    }
+    .div_small_popup {
+      width:748px;height:480px;position:fixed;top:calc(50vh - 240px);right:calc(50% - 380px);
+      background-color: rgba(0,0,0,0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      font-family: 'entypo', sans-serif;
+    }
+    .div_small_popup > .body > .collum > .sub-section {
+      width: 100%;font-size: 14px;
+        float: left;
+        display: inline-block;
+        background-color: rgba(0,0,0,0.8);
+        border: none;
+        border: 2px solid #ccc;
+        margin-top: 6px;
+        color: white;
+        resize: none;
+        border-radius: 3px;
+        font-family: 'entypo', sans-serif;
+    }
+    .sub-section-input {
+      height:42px;line-height:42px;border-radius:3px;background-color:rgba(0,0,0,0.8);border:2px solid #ccc;padding-left:12px;padding-right:12px;
+      font-family: 'entypo', sans-serif;
+    }
+    .sub-section-input:focus {
+      outline: none;
+    }
+    .div_small_popup > .body > .collum > .sub-section:focus {
+      outline: none;
+    }
+    input[type="file"] {
+        display: none;
+    }
+    button:focus {
+      outline: none;
+    }
+    .custom-file-upload {
+      width: 100%;height: 52px;line-height: 48px;font-size: 16px;
+        border: 2px solid #ccc;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.4s;
+        background-color: rgba(0,0,0,0.8);
+        border-radius: 2px;
+        font-family: 'entypo', sans-serif;
+        border-radius: 3px;
+    }
+    .custom-file-upload:hover {
+      background-color: #424242;
+    }
+    .div_small_popup > .body {
+      width: 100%;
+      height: calc(100% - 60px);
+      display: inline-block;
+      float: left;
+      overflow: hidden;
+      font-family: 'entypo', sans-serif;
+    }
+    .div_small_popup > .body > .collum > .collum > input {
+      height:52px;line-height:52px;border-radius:3px;background-color:rgba(0,0,0,0.8);border:2px solid #ccc;padding-left:12px;padding-right:12px;margin-left:0px;width:100%;font-size:15px;
+    }
+    .div_small_popup > .body > .collum {
+      float: left;
+      display: inline-block;
+      height: 100%;
+      font-family: 'entypo', sans-serif;
+    }
+    .div_small_popup > .header {
+      width: 100%;
+      display: inline-block;
+      float: left;
+      height: 62px;
+      background-color: black;
+      color: white;
+      text-align: center;
+    }
+    .div_small_popup > .header > h2 {
+      font-size: 20px;
+      line-height: 62px;
+      margin: 0px;
+      padding: 0px;
+      font-weight: 400;
+    }
+    .section-button:hover {
+      background-color: rgb(80,89,123);
+    }
+    .section-button:focus {
+      outline: none;
+    }
     .record-block-quiter {
       position:absolute;top:0px;right:0px;padding-left:16px;padding-right:14px;padding-top: 6px;padding-bottom: 10px;font-size:16px;cursor:pointer;
       opacity: 0.8;

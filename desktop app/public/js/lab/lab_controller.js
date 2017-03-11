@@ -99,8 +99,6 @@ var app = angular.module("app")
       showPoint: false,
       showArea: false,
       fullWidth: true,
-      // high: dsp.find_max(ecg_bin),
-      // low: dsp.find_min(ecg_bin),
       high: high_val,
       low: low_val,
       axisX: {
@@ -124,8 +122,34 @@ var app = angular.module("app")
       //dsp.create_threshold($scope.window_leng, dsp.cal_mean(ecg_bin) + 1.5 * dsp.cal_std(ecg_bin)),
     ]
   };
+  var create_chart_options_without_highlow = function(x_axis_ops, y_axis_ops) {
+    var obj = {
+      showPoint: false,
+      showArea: false,
+      fullWidth: true,
+      axisX: {
+        showGrid: x_axis_ops[0],
+        showLabel: x_axis_ops[1],
+      },
+      axisY: {
+        showGrid: y_axis_ops[0],
+        showLabel: y_axis_ops[1],
+      },
+      chartPadding: {
+        right: 20,
+        bottom: 0
+      },
+    };
+    return obj;
+  };
+  var chart_data = {
+    series: [
+      random_data($scope.window_leng, 800),
+    ]
+  };
   $scope.initiateChart = function(max_val, min_val) {
     $scope.chart = new Chartist.Line('.ct-chart', chart_data, create_chart_options([true, false], [true, true], max_val, min_val));
+    // $scope.chart = new Chartist.Line('.ct-chart', chart_data, create_chart_options_without_highlow([true, false], [true, true]));
     // $scope.chart_fecg = new Chartist.Line('.fecg-chart', chart_data, create_chart_options([false, false], [false, false], dsp.find_max(ecg_bin), dsp.find_min(ecg_bin)));
     // $scope.chart.on('draw', function(context) {
     //   // First we want to make sure that only do something when the draw event is for bars. Draw events do get fired for labels and grids too.
@@ -150,7 +174,7 @@ var app = angular.module("app")
   };
 
   var perform_diagnosis_for_these_features = function(hr, hrv, std, tp) {
-    if (std > 60 && tp > 90) {
+    if (std > 40 && tp > 96) {
       $scope.health_condition = 2;
       $scope.statistics_count[2] += 1;
       $scope.health = "ST Elevate";
@@ -671,15 +695,6 @@ var app = angular.module("app")
 
   socket.on("save_record_to_server_successed", function(response) {
     alert("Record saved successfully!");
-    var record = response;
-    if ($window.localStorage["cassandra_records"]) {
-      $scope.records = JSON.parse($window.localStorage["cassandra_records"]);
-    } else {
-      $scope.records = [];
-    };
-    record.record_data.data = [];
-    $scope.records.push(record);
-    $window.localStorage["cassandra_records"] = JSON.stringify($scope.records);
   });
 
   var transform_statistics = function(array) {
