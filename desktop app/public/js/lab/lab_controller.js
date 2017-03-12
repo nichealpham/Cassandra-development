@@ -278,7 +278,9 @@ var app = angular.module("app")
         for (i = 0; i < ecg_bin.length; i ++) {
           ecg_bin[i] = ecg_bin[i] * 1000;
         };
+
         // Scale above 0
+
         var value = dsp.find_min(ecg_bin);
         if (value < 0) {
           for (i = 0; i < ecg_bin.length; i ++) {
@@ -287,16 +289,28 @@ var app = angular.module("app")
         } else {
           ecg_bin[i] = ecg_bin[i] - value;
         };
-        // Scale about mean
+
+        // var value = dsp.find_min(ecg_bin);
+        // for (i = 0; i < ecg_bin.length; i ++) {
+        //   ecg_bin[i] = ecg_bin[i] + Math.abs(value);
+        // };
+
+        // Scale about mean 1
+
         var value = dsp.cal_mean(ecg_bin);
-        for (i = 0; i < ecg_bin.length; i ++) {
-          ecg_bin[i] = ecg_bin[i] - value;
-        };
+        // if (value > 400) {
+          for (i = 0; i < ecg_bin.length; i ++) {
+            ecg_bin[i] = ecg_bin[i] - value;
+          };
+        // }
+
         // Normalize from -1000 to 1000
+
         var value = dsp.find_max(ecg_bin);
         for (i = 0; i < ecg_bin.length; i ++) {
           ecg_bin[i] = Math.floor(ecg_bin[i] / value * 1000);
         };
+
         ecg_bin = preprocess_signal([10, 1500], $scope.down_sampling_value, null, ecg_bin);
         var chart_max_value = dsp.find_max(ecg_bin);
         var chart_min_value = dsp.find_min(ecg_bin);

@@ -11,7 +11,7 @@
 <body style="overflow:hidden;">
   <div class="div_nen_den" style="" id="upload_record_popup">
     <form ng-submit="save_this_record()">
-      <div class="div_small_popup" style="border:3px solid black;top:140px;border-radius:0px;opacity:0;">
+      <div id="smallPopup_uploadRecord" class="div_small_popup" style="border:3px solid black;top:140px;border-radius:0px;opacity:0;">
           <div class="header">
             <h2 style="">SAVE THIS RECORD</h2>
             <label ng-click="close_popup_upload_record()" class="record-block-quiter grey_color" style="font-size:24px;top:11px;right:6px;">
@@ -218,7 +218,6 @@
 
     </div>
     <script src="lib/jquery/jquery.min.js"></script>
-
     <script>
       try {
           $ = jQuery = module.exports;
@@ -226,7 +225,10 @@
           // module.exports = {};
       } catch(e) {}
     </script>
-
+    <script src="lib/jqueryDraggable/jqueryDraggable.min.js"></script>
+    <script>
+      jQuery("#smallPopup_uploadRecord").tinyDraggable({ handle: '.header' });
+    </script>
     <!-- <script src="lib/dsp/fili.min.js"></script> -->
 
     <script src="lib/bootstrap/bootstrap.min.js"></script>

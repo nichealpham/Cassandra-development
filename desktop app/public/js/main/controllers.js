@@ -163,6 +163,7 @@ var app = angular.module("app")
 }])
 .controller("recordsController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', '$timeout', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, $timeout) {
   jQuery("#upload_record_popup").hide();
+  jQuery("#smallPopup_uploadRecord").tinyDraggable({ handle: '.header' });
   $scope.local_server = {
     name: "Local server",
     link: "http://localhost:2000",
