@@ -283,33 +283,28 @@ var app = angular.module("app")
   //   console.log($scope.records);
   //   jQuery("#loading_records_spinner").hide();
   // });
-
+  //
   // socket.on("get_all_records_from_text_file_failed", function(response) {
   //   alert("Sorry, cassandra cannot get your records. Please allow the software to access your network!");
   //   jQuery("#loading_records_spinner").hide();
   // });
 
-  $scope.update_my_records_to_local_storage = function(obj) {
-    if (obj) {
-      var text_content = JSON.stringify(obj);
-      socket.emit("update_all_records_on_local_server", { text_content: text_content });
-    } else {
-      var text_content = JSON.stringify($scope.records);
-      socket.emit("update_all_records_on_local_server", { text_content: text_content });
-    };
-
+  $scope.update_my_records_to_local_storage = function() {
+    var text_content = JSON.stringify($scope.records);
+    socket.emit("update_all_records_on_local_server", { text_content: text_content });
   };
 
   socket.on("update_all_records_to_local_server_failed", function(response) {
+    jQuery("#page_loading").hide();
     alert("Sorry, update all records failed");
   });
 
   socket.on("update_all_records_to_local_server_successed", function(response) {
     jQuery("#page_loading").hide();
-    // $scope.$apply(function() {
-    //   $scope.records = JSON.parse(response.records_text);
-    //   $scope.close_popup_upload_record();
-    // });
+    $scope.$apply(function() {
+      $scope.records = JSON.parse(response.records_text);
+    });
+    alert("Record saved successfully!");
     $scope.close_popup_upload_record();
   });
 
@@ -388,23 +383,27 @@ var app = angular.module("app")
       $scope.selected_index = index;
       $scope.cancel_all_timeouts_and_intervals();
 
-      // $scope.new_records = $scope.records;
-      // $scope.new_records.splice(index, 1);
-      $scope.update_my_records_to_local_storage($scope.new_records);
+      // $scope.$apply(function() {
+      //   $scope.records.splice(index, 1);
+      // });
+      // $scope.update_my_records_to_local_storage();
 
       $scope.records.splice(index, 1);
+      jQuery("#page_loading").hide();
+
       $window.localStorage["cassandra_records"] = JSON.stringify($scope.records);
     };
   };
 
   socket.on("save_record_to_server_successed", function(response) {
-
+    jQuery("#page_loading").hide();
     response.record_data.data = [];
     $scope.$apply(function () {
       $scope.records.push(response);
       $window.localStorage["cassandra_records"] = JSON.stringify($scope.records);
-      $scope.update_my_records_to_local_storage();
+      $scope.close_popup_upload_record();
     });
+    // $scope.update_my_records_to_local_storage();
     alert("Record saved successfully!");
   });
 

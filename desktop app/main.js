@@ -363,7 +363,30 @@ function createWindow () {
               };
             });
           });
-
+          socket.on("update_all_records_on_local_server", function(data) {
+            var text_to_write = data.text_content;
+            fs.writeFile(__dirname + "\\public\\bin\\my_records.txt", text_to_write, function (err) {
+              if (err) {
+                console.log(err);
+                io.sockets.emit("update_all_records_to_local_server_failed", err);
+              } else {
+                console.log("Update all records successed");
+                io.sockets.emit("update_all_records_to_local_server_successed", {records_text: text_to_write});
+              };
+            });
+          });
+          socket.on("get_all_records_from_text_file", function() {
+            var filename = "my_records.txt";
+            fs.readFile(__dirname + "\\public\\bin\\my_records.txt", 'utf8', function (err, data) {
+              if (err) {
+                socket.emit("get_all_records_from_text_file_failed", err);
+                console.log(err);
+              } else {
+                socket.emit("get_all_records_from_text_file_succeeded", { text_content: data });
+                console.log("Read record " + filename + " succeed, length: " + data.length);
+              };
+            });
+          });
           socket.on("get_this_record_from_server", function(link) {
             var filename = link.substring(link.lastIndexOf('/') + 1);
             fs.readFile(__dirname + "\\public" + "\\bin\\saved-records\\" + filename, 'utf8', function (err, data) {
