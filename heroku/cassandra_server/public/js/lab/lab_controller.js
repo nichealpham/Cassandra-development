@@ -15,7 +15,7 @@ var app = angular.module("app")
 
   $scope.local_server = {
     name: "Local server",
-    link: "http://cassandra-server.herokuapp.com",
+    link: "https://cassandra-server.herokuapp.com",
   };
   $scope.express_server = {
     name: "Cassandra express server",

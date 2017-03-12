@@ -164,14 +164,31 @@ var app = angular.module("app")
 .controller("recordsController", ["$scope", "$http", "$rootScope", "$window", "printService", 'FileSaver', 'Blob', '$location', '$interval', '$timeout', function ($scope, $http, $rootScope, $window, printService, FileSaver, Blob, $location, $interval, $timeout) {
   jQuery("#upload_record_popup").hide();
   jQuery("#smallPopup_uploadRecord").tinyDraggable({ handle: '.header' });
+
   $scope.local_server = {
     name: "Local server",
-    link: "http://cassandra-server.herokuapp.com",
+    link: "https://cassandra-server.herokuapp.com",
   };
   $scope.express_server = {
     name: "Cassandra express server",
     link: "http://localhost:8081",
   };
+
+  var person = prompt("Please enter your name", "Harry Potter");
+  if (person != null) {
+    $http({
+      method: 'POST',
+      url: $scope.local_server.link + "/cool",
+      data: {
+        name: person
+      }
+    }).then(function successCallback(response) {
+      alert(response.data);
+    }, function errorCallback(response) {
+      alert("Post data failed!");
+    });
+  };
+
   $scope.ecg_data = [];
   $scope.file_content = [];
   $scope.record_name = "";
@@ -251,7 +268,7 @@ var app = angular.module("app")
         date: new Date(),
         fs: 360,
         dur: 60,
-        data_link: "http://cassandra-server.herokuapp.com/bin/saved-records/Tinv.txt",
+        data_link: "https://cassandra-server.herokuapp.com/bin/saved-records/Tinv.txt",
         description: "1 minute stress test",
         clinical_symptoms: {
           chest_pain: false,
@@ -265,7 +282,7 @@ var app = angular.module("app")
       {
         name: "Small ST deviation",
         date: new Date(),
-        data_link: "http://cassandra-server.herokuapp.com/bin/saved-records/small_STD.txt",
+        data_link: "https://cassandra-server.herokuapp.com/bin/saved-records/small_STD.txt",
         description: "1 minutes of dizziness and sweating",
         clinical_symptoms: {
           chest_pain: false,
@@ -279,7 +296,7 @@ var app = angular.module("app")
       {
         name: "Healthy ECG",
         date: new Date(),
-        data_link: "http://cassandra-server.herokuapp.com/bin/saved-records/healthy_ECG.txt",
+        data_link: "https://cassandra-server.herokuapp.com/bin/saved-records/healthy_ECG.txt",
         description: "My 1 minute ECG while relaxing and watching movies",
         clinical_symptoms: {
           chest_pain: false,
@@ -293,7 +310,7 @@ var app = angular.module("app")
       {
         name: "Transient T peaked",
         date: new Date(),
-        data_link: "http://cassandra-server.herokuapp.com/bin/saved-records/transient_T_peak.txt",
+        data_link: "https://cassandra-server.herokuapp.com/bin/saved-records/transient_T_peak.txt",
         description: "My 1 minute ECG data during treadmill test",
         clinical_symptoms: {
           chest_pain: false,
@@ -307,7 +324,7 @@ var app = angular.module("app")
       {
         name: "Suspected NSTEMI",
         date: new Date(),
-        data_link: "http://cassandra-server.herokuapp.com/bin/saved-records/suspected_NSTEMI.txt",
+        data_link: "https://cassandra-server.herokuapp.com/bin/saved-records/suspected_NSTEMI.txt",
         description: "Hard to breath at night",
         clinical_symptoms: {
           chest_pain: true,
@@ -321,7 +338,7 @@ var app = angular.module("app")
       {
         name: "Arrythmia-100",
         date: new Date(),
-        data_link: "http://cassandra-server.herokuapp.com/bin/saved-records/arrythmia_100.txt",
+        data_link: "https://cassandra-server.herokuapp.com/bin/saved-records/arrythmia_100.txt",
         description: "Resting ECG while listening to music",
         clinical_symptoms: {
           chest_pain: false,
@@ -335,7 +352,7 @@ var app = angular.module("app")
       {
         name: "Transient ST devation",
         date: new Date(),
-        data_link: "http://cassandra-server.herokuapp.com/bin/saved-records/transient_ST_deviation.txt",
+        data_link: "https://cassandra-server.herokuapp.com/bin/saved-records/transient_ST_deviation.txt",
         description: "My ECG while driving in heavy traffic",
         clinical_symptoms: {
           chest_pain: false,

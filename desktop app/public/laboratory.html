@@ -4,14 +4,14 @@
   <link rel="stylesheet" type="text/css" href="css/scrollbar.css">
   <link rel="stylesheet" type="text/css" href="css/bootstrap_grid.css">
   <link rel="stylesheet" type="text/css" href="css/global.css">
-
+  <link rel="stylesheet" type="text/css" href="css/loading_spinner.css">
   <link rel="stylesheet" type="text/css" href="lib/chartist/chartist.css">
   <link rel="stylesheet" type="text/css" href="lib/font-awesome/font-awesome.min.css">
 </head>
 <body style="overflow:hidden;">
   <div class="div_nen_den" style="" id="upload_record_popup">
     <form ng-submit="save_this_record()">
-      <div id="smallPopup_uploadRecord" class="div_small_popup" style="border:3px solid black;top:140px;border-radius:0px;opacity:0;">
+      <div id="smallPopup_uploadRecord" class="div_small_popup" style="border:3px solid black;top:60px;border-radius:0px;opacity:0;">
           <div class="header">
             <h2 style="">SAVE THIS RECORD</h2>
             <label ng-click="close_popup_upload_record()" class="record-block-quiter grey_color" style="font-size:24px;top:11px;right:6px;">
@@ -87,6 +87,20 @@
       </div>
     </form>
 
+  </div>
+  <div class="sk-circle" id="page_loading" style="position:fixed;z-index:2000;top:calc(50% - 146px);right:calc(50% - 30px);">
+    <div class="sk-circle1 sk-child"></div>
+    <div class="sk-circle2 sk-child"></div>
+    <div class="sk-circle3 sk-child"></div>
+    <div class="sk-circle4 sk-child"></div>
+    <div class="sk-circle5 sk-child"></div>
+    <div class="sk-circle6 sk-child"></div>
+    <div class="sk-circle7 sk-child"></div>
+    <div class="sk-circle8 sk-child"></div>
+    <div class="sk-circle9 sk-child"></div>
+    <div class="sk-circle10 sk-child"></div>
+    <div class="sk-circle11 sk-child"></div>
+    <div class="sk-circle12 sk-child"></div>
   </div>
     <div id="divMain" class="main-container container-fluid" style="width:100vw;height:100vh;position:fixed;color:white;top:0px;left:0px;padding-bottom:0px;">
       <header style="z-index:1;height:80px;padding-top:4px;background-color:rgba(31,37,61,0.6);position:fixed;top:0px;border-radius:0px;" class="block col-md-12 hidden-sm hidden-xs">

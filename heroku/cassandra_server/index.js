@@ -23,10 +23,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// app.use(express.json());       // to support JSON-encoded bodies
+// app.use(express.urlencoded()); // to support URL-encoded bodies
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
+});
+
+app.post('/cool', function(request, response) {
+  var name = request.body.name;
+  response.send("Hello " + name + ". Post accepted!");
 });
 
 var numUsers = 0;
@@ -74,6 +82,7 @@ io.sockets.on('connection', function (socket) {
           });
 
 });
+
 server.listen(port, "0.0.0.0", function () {
   console.log('Server listening at port %d', port);
 });

@@ -25,7 +25,8 @@ var app = angular.module("app")
   var socket = io.connect($scope.local_server.link);
 
   var red_code = "#f05b4f";
-  var orange_code = "#d17905";
+  // var orange_code = "#d17905";
+  var orange_code = "#FF9800";
   var green_code = "#8BC34A";
 
   if ($window.localStorage["cassandra_userInfo"]) {
@@ -69,6 +70,16 @@ var app = angular.module("app")
     $scope.std_color              = colors_pool[$scope.std_condition];
 
     $scope.statistics_count = [0, 0, 0];
+  };
+  $scope.check_for_health_color = function() {
+    var value = 0;
+    var arr = [$scope.heart_rate_condition, $scope.variability_condition, $scope.tmag_condition, $scope.std_condition];
+    for (var loop = 0; loop < arr.length; loop++) {
+      if (arr[loop] > value) {
+        value = arr[loop];
+      };
+    };
+    return value;
   };
   var initiate_window_settings = function() {
     $scope.plot_speed = 40;             // 50 points per 1,000ms
@@ -182,76 +193,95 @@ var app = angular.module("app")
   };
 
   var perform_diagnosis_for_these_features = function(hr, hrv, std, tp) {
-    if (std > 40 && tp > 96) {
-      $scope.health_condition = 2;
+    if (std > 30 && tp > 80) {
+      // $scope.health_condition = 2;
       $scope.statistics_count[2] += 1;
       $scope.health = "ST Elevate";
       // $scope.health = "Danger";
       return;
     };
-    if (std < -40 && tp < -20) {
-      $scope.health_condition = 2;
+    if (std < -20 && tp < -20) {
+      // $scope.health_condition = 2;
       $scope.statistics_count[2] += 1;
       $scope.health = "NSTEMI";
       // $scope.health = "Danger";
       return;
     };
     if (hrv > 20 && hr < 90) {
-      $scope.health_condition = 1;
+      // $scope.health_condition = 1;
       $scope.statistics_count[1] += 1;
       $scope.health = "PVC";
       // $scope.health = "Caution";
       return;
     };
     if (hrv > 12) {
-      $scope.health_condition = 2;
+      // $scope.health_condition = 2;
       $scope.statistics_count[2] += 1;
       $scope.health = "Arrythmia";
       // $scope.health = "Caution";
       return;
     };
-    if (std < -20) {
-      $scope.health_condition = 1;
-      $scope.statistics_count[1] += 1;
-      $scope.health = "ST Deviate";
-      // $scope.health = "Caution";
-      return;
-    };
-    if (std > -40 && std < 40 && tp < -20) {
-      $scope.health_condition = 1;
+
+    if (tp < -10) {
+      // $scope.health_condition = 1;
       $scope.statistics_count[1] += 1;
       $scope.health = "T inverted";
       // $scope.health = "Caution";
       return;
     };
-    if (std > -40 && std < 40 && tp > 140) {
-      $scope.health_condition = 1;
+
+    if (tp > 100) {
+      // $scope.health_condition = 1;
       $scope.statistics_count[1] += 1;
       $scope.health = "T peaked";
       // $scope.health = "Caution";
       return;
     };
-    if (hr > 120) {
-      $scope.health_condition = 1;
+
+    if (std < -10 || std > 20) {
+      // $scope.health_condition = 1;
       $scope.statistics_count[1] += 1;
+      $scope.health = "ST Deviate";
+      // $scope.health = "Caution";
+      return;
+    };
+
+
+    if (hr > 140) {
+      // $scope.health_condition = 1;
+      $scope.statistics_count[2] += 1;
       $scope.health = "Tarchy";
       // $scope.health = "Caution";
       return;
     };
-    if (hr < 50) {
-      $scope.health_condition = 1;
+    if (hr > 120) {
+      // $scope.health_condition = 1;
       $scope.statistics_count[1] += 1;
+      $scope.health = "Fast HR";
+      // $scope.health = "Caution";
+      return;
+    };
+    if (hr < 50) {
+      // $scope.health_condition = 1;
+      $scope.statistics_count[2] += 1;
       $scope.health = "Brady";
       // $scope.health = "Caution";
       return;
     };
-    if (tp > -20 && tp < 2) {
-      $scope.health_condition = 1;
+    if (hr < 60) {
+      // $scope.health_condition = 1;
+      $scope.statistics_count[1] += 1;
+      $scope.health = "Slow HR";
+      // $scope.health = "Caution";
+      return;
+    };
+    if (tp > -10 && tp < 4) {
+      // $scope.health_condition = 1;
       $scope.statistics_count[1] += 1;
       $scope.health = "T Absence";
       return;
     };
-    $scope.health_condition = 0;
+    // $scope.health_condition = 0;
     $scope.statistics_count[0] += 1;
     $scope.health = "Normal";
   };
@@ -436,8 +466,8 @@ var app = angular.module("app")
       var t0 = performance.now();
       heart_rate_interval_tasks_handle();
       variability_interval_tasks_handle();
-      health_interval_tasks_handle();
       t_and_std_interval_tasks_handle();
+      health_interval_tasks_handle();
 
       // var package_to_server = {
       //   number_of_samples: $scope.window_leng,
@@ -553,7 +583,7 @@ var app = angular.module("app")
     // var fs   = 50;
     // var data = chart_data.series[0];
     // socket.emit("calculate_heart_rate", [fs, data]);
-    var fs   = 50;
+    var fs   = $scope.plot_speed;
     var data = chart_data.series[0];
     var heart_rates = dsp.calculate_heart_rates(fs, data);
     for (i = 0; i < heart_rates.length; i++) {
@@ -561,23 +591,24 @@ var app = angular.module("app")
       hrh_data.push(heart_rates[i]);
     };
     $scope.heart_rate = Math.round(dsp.cal_mean(heart_rates));
-    if ($scope.heart_rate < 60) {
-      $scope.heart_rate_condition = 1;
-      update_colors();
+    if ($scope.heart_rate <= 50) {
+      $scope.heart_rate_condition = 2;
     } else {
-      if ($scope.heart_rate < 100) {
-        $scope.heart_rate_condition = 0;
-        update_colors();
+      if ($scope.heart_rate <= 60) {
+        $scope.heart_rate_condition = 1;
       } else {
-        if ($scope.heart_rate < 120) {
-          $scope.heart_rate_condition = 1;
-          update_colors();
+        if ($scope.heart_rate <= 120) {
+          $scope.heart_rate_condition = 0;
         } else {
-          $scope.heart_rate_condition = 2;
-          update_colors();
+          if ($scope.heart_rate <= 140) {
+            $scope.heart_rate_condition = 1;
+          } else {
+            $scope.heart_rate_condition = 2;
+          };
         };
       };
     };
+    update_colors();
   };
   var variability_interval_tasks_handle = function() {
     // socket.emit("calculate_hrv", { values: hrv_data });
@@ -586,10 +617,10 @@ var app = angular.module("app")
     value = (Math.floor(value * 100) / 100).toFixed(2);
     hrvh_data.push(value);
     $scope.variability = value;
-    if (value < 10) {
+    if (value <= 10) {
       $scope.variability_condition = 0;
     } else {
-      if (value < 20) {
+      if (value <= 20) {
         $scope.variability_condition = 1;
       } else {
         $scope.variability_condition = 2;
@@ -599,7 +630,7 @@ var app = angular.module("app")
     hrv_data = [];
   };
   var t_and_std_interval_tasks_handle = function() {
-    var fs   = 50;
+    var fs   = $scope.plot_speed;
     var data = chart_data.series[0];
     var qrs_locs = dsp.qrs_detect(fs, data);
     var result = dsp.t_peaks_detect(fs, data, qrs_locs);
@@ -619,30 +650,33 @@ var app = angular.module("app")
     // End of healthcare bin
     // Handle t peak
     $scope.tmag = t_peak;
-    if (t_peak < -20) {
+    if (t_peak <= -20) {
       $scope.tmag_condition = 2;
     } else {
-      if (t_peak > 110) {
+      if (t_peak >= -20 && t_peak <= -10) {
         $scope.tmag_condition = 1;
       } else {
-        if (t_peak > -20 && t_peak < 2) {
+        if (t_peak >= 80) {
           $scope.tmag_condition = 1;
         } else {
-          $scope.tmag_condition = 0;
-        }
-
+          if (t_peak >= -10 && t_peak <= 4) {
+            $scope.tmag_condition = 1;
+          } else {
+            $scope.tmag_condition = 0;
+          }
+        };
       };
     };
     // Hanlde std value
     $scope.std_val = std_val;
-    if (std_val < -40) {
+    if (std_val <= -20 || std_val >= 30) {
       $scope.std_condition = 2;
     } else {
-      if (std_val < -20) {
+      if (std_val >= -20 && std_val <= -10) {
         $scope.std_condition = 1;
       } else {
-        if (std_val > 40) {
-          $scope.std_condition = 2;
+        if (std_val >= 20 && std_val <= 30) {
+          $scope.std_condition = 1;
         } else {
           $scope.std_condition = 0;
         };
@@ -658,7 +692,7 @@ var app = angular.module("app")
     var mean_std = dsp.cal_mean(stdh_data);
 
     perform_diagnosis_for_these_features(mean_hr, mean_hrv, mean_std, mean_t);
-
+    $scope.health_condition = $scope.check_for_health_color();
     update_colors();
     hrh_data = [];
     hrvh_data = [];
@@ -709,13 +743,15 @@ var app = angular.module("app")
   });
 
   socket.on("save_record_to_server_failed", function(response) {
-    alert(response);
+    jQuery("#page_loading").hide();
+    alert("Save record to server failed");
+
   });
 
   socket.on("save_record_to_server_successed", function(response) {
+    jQuery("#page_loading").hide();
+    $scope.cancel_custom_timeout();
     $scope.close_popup_upload_record();
-    alert("Record saved successfully!");
-
   });
 
   var transform_statistics = function(array) {
@@ -756,18 +792,26 @@ var app = angular.module("app")
   };
 
   $scope.open_popup_upload_record = function() {
-    $scope.ecg_data = ecg_storage;
-    var text_output_to_area = "";
-    for (var loop = 0; loop < $scope.ecg_data.length; loop++) {
-      text_output_to_area = text_output_to_area + $scope.ecg_data[loop] / 1000 + "\n";
-    };
-    $scope.file_content = text_output_to_area;
-    $scope.update_duration();
     jQuery("#upload_record_popup").show();
     jQuery("#upload_record_popup > form > .div_small_popup").animate({
       top: 100,
       opacity: 1
     }, 400);
+    $scope.custom_timeout = $timeout(function() {
+      jQuery("#page_loading").show();
+      $scope.cancel_custom_timeout();
+      $scope.custom_timeout = $timeout(function() {
+        $scope.ecg_data = ecg_storage;
+        var text_output_to_area = "";
+        for (var loop = 0; loop < $scope.ecg_data.length; loop++) {
+          text_output_to_area = text_output_to_area + $scope.ecg_data[loop] / 1000 + "\n";
+        };
+        $scope.file_content = text_output_to_area;
+        $scope.update_duration();
+        jQuery("#page_loading").hide();
+        $scope.cancel_custom_timeout();
+      }, 1600);
+    }, 500);
   };
 
   $scope.close_popup_upload_record = function() {
@@ -777,38 +821,52 @@ var app = angular.module("app")
     $scope.record_sampling_frequency = 100;
     $scope.record_duration = Math.floor($scope.file_content.length / ($scope.record_sampling_frequency) * 10) / 10;
     $scope.record_date = new Date();
-    jQuery("#upload_record_popup > form > .div_small_popup").animate({
-      top: 140,
-      opacity: 0
-    }, 400, function() {
-      jQuery("#upload_record_popup").hide();
-    });
+    $scope.custom_timeout = $timeout(function () {
+      jQuery("#upload_record_popup > form > .div_small_popup").animate({
+        top: 60,
+        opacity: 0
+      }, 400, function() {
+        jQuery("#upload_record_popup").hide();
+      });
+      $scope.cancel_custom_timeout();
+    }, 160);
   };
 
   $scope.save_this_record = function() {
-    for (var loop = 0; loop < ecg_storage.length; loop++) {
-      ecg_storage[loop] = ecg_storage[loop] / 1000;
-    };
-    $scope.new_record = {
-      name: $scope.record_name,
-      date: $scope.record_date,
-      data_link: $scope.local_server.link + "\\bin\\saved-records\\" + $scope.record_name.split(' ').join('_') + ".txt",
-      description: $scope.record_comment,
-      clinical_symptoms: {
-        chest_pain: false,
-        shortness_of_breath: false,
-        severe_sweating: false,
-        dizziness: false,
-      },
-      statistics: transform_statistics($scope.statistics_count),
-      send_to_doctor: false,
-      record_data: {
-        sampling_frequency: $scope.record_sampling_frequency,
-        data: ecg_storage
-      }
-    };
 
-    socket.emit("save_this_record_to_server", $scope.new_record);
+    jQuery("#page_loading").show();
+    $scope.custom_timeout = $timeout(function() {
+
+      for (var loop = 0; loop < ecg_storage.length; loop++) {
+        ecg_storage[loop] = ecg_storage[loop] / 1000;
+      };
+
+      $scope.new_record = {
+        name: $scope.record_name,
+        date: $scope.record_date,
+        data_link: $scope.local_server.link + "\\bin\\saved-records\\" + $scope.record_name.split(' ').join('_') + ".txt",
+        description: $scope.record_comment,
+        clinical_symptoms: {
+          chest_pain: false,
+          shortness_of_breath: false,
+          severe_sweating: false,
+          dizziness: false,
+        },
+        statistics: transform_statistics($scope.statistics_count),
+        send_to_doctor: false,
+        record_data: {
+          sampling_frequency: $scope.record_sampling_frequency,
+          data: ecg_storage
+        }
+      };
+
+      socket.emit("save_this_record_to_server", $scope.new_record);
+
+      $scope.cancel_custom_timeout();
+
+    }, 1200);
+
+
 
     // $http({
     //   method: "POST",
@@ -821,4 +879,13 @@ var app = angular.module("app")
     // });
 
   };
+
+  $scope.cancel_custom_timeout = function() {
+    if ($scope.custom_timeout) {
+      $timeout.cancel($scope.custom_timeout);
+      $scope.custom_timeout = null;
+    };
+  };
+
+  jQuery("#page_loading").hide();
 }]);

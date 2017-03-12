@@ -242,113 +242,77 @@ var app = angular.module("app")
   };
   $scope.timer = 0;
   $scope.selected_index = -1;
+
+  // $http({
+  //   method: "GET",
+  //   url: $scope.local_server.link + "/bin/my_records.txt"
+  // }).then(function successCallback(response) {
+  //
+  //   if (response.data) {
+  //     $scope.records = response.data;
+  //   } else {
+  //     $scope.records = [];
+  //   };
+  //   jQuery("#loading_records_spinner").hide();
+  //   jQuery("#loading_records_spinner").hide();
+  // }, function errorCallback(response) {
+  //   alert("Sorry, cassandra cannot get your records. Please allow the software to access your network!");
+  // });
+
   if ($window.localStorage["cassandra_records"]) {
     $scope.records = JSON.parse($window.localStorage["cassandra_records"]);
+    jQuery("#loading_records_spinner").hide();
   } else {
-    $scope.records = [
-      {
-        name: "T wave inverted + Arrythmia-100 stay caution",
-        date: new Date(),
-        fs: 360,
-        dur: 60,
-        data_link: "http://localhost:2000/bin/saved-records/Tinv.txt",
-        description: "1 minute stress test",
-        clinical_symptoms: {
-          chest_pain: false,
-          shortness_of_breath: true,
-          severe_sweating: true,
-          dizziness: false,
-        },
-        statistics: [0, 90, 10],
-        send_to_doctor: false
-      },
-      {
-        name: "Small ST deviation",
-        date: new Date(),
-        data_link: "http://localhost:2000/bin/saved-records/small_STD.txt",
-        description: "1 minutes of dizziness and sweating",
-        clinical_symptoms: {
-          chest_pain: false,
-          shortness_of_breath: false,
-          severe_sweating: true,
-          dizziness: true,
-        },
-        statistics: [80, 20, 0],
-        send_to_doctor: false
-      },
-      {
-        name: "Healthy ECG",
-        date: new Date(),
-        data_link: "http://localhost:2000/bin/saved-records/healthy_ECG.txt",
-        description: "My 1 minute ECG while relaxing and watching movies",
-        clinical_symptoms: {
-          chest_pain: false,
-          shortness_of_breath: false,
-          severe_sweating: false,
-          dizziness: false,
-        },
-        statistics: [100, 0, 0],
-        send_to_doctor: false
-      },
-      {
-        name: "Transient T peaked",
-        date: new Date(),
-        data_link: "http://localhost:2000/bin/saved-records/transient_T_peak.txt",
-        description: "My 1 minute ECG data during treadmill test",
-        clinical_symptoms: {
-          chest_pain: false,
-          shortness_of_breath: false,
-          severe_sweating: false,
-          dizziness: false,
-        },
-        statistics: [30, 60, 10],
-        send_to_doctor: false
-      },
-      {
-        name: "Suspected NSTEMI",
-        date: new Date(),
-        data_link: "http://localhost:2000/bin/saved-records/suspected_NSTEMI.txt",
-        description: "Hard to breath at night",
-        clinical_symptoms: {
-          chest_pain: true,
-          shortness_of_breath: true,
-          severe_sweating: true,
-          dizziness: false,
-        },
-        statistics: [10, 40, 50],
-        send_to_doctor: false
-      },
-      {
-        name: "Arrythmia-100",
-        date: new Date(),
-        data_link: "http://localhost:2000/bin/saved-records/arrythmia_100.txt",
-        description: "Resting ECG while listening to music",
-        clinical_symptoms: {
-          chest_pain: false,
-          shortness_of_breath: false,
-          severe_sweating: false,
-          dizziness: false,
-        },
-        statistics: [90, 10, 0],
-        send_to_doctor: false
-      },
-      {
-        name: "Transient ST devation",
-        date: new Date(),
-        data_link: "http://localhost:2000/bin/saved-records/transient_ST_deviation.txt",
-        description: "My ECG while driving in heavy traffic",
-        clinical_symptoms: {
-          chest_pain: false,
-          shortness_of_breath: false,
-          severe_sweating: false,
-          dizziness: false,
-        },
-        statistics: [30, 60, 10],
-        send_to_doctor: false
-      },
-    ];
-    $window.localStorage["cassandra_records"] = JSON.stringify($scope.records);
+    $scope.records = [];
+    jQuery("#loading_records_spinner").hide();
   };
+
+  // socket.emit("get_all_records_from_text_file");
+
+  // socket.on("get_all_records_from_text_file_succeeded", function(response) {
+  //   if (response.text_content) {
+  //     $scope.$apply(function() {
+  //       $scope.records = JSON.parse(response.text_content);
+  //     });
+  //
+  //   } else {
+  //     $scope.$apply(function() {
+  //       $scope.records = [];
+  //     });
+  //   };
+  //   console.log($scope.records);
+  //   jQuery("#loading_records_spinner").hide();
+  // });
+
+  // socket.on("get_all_records_from_text_file_failed", function(response) {
+  //   alert("Sorry, cassandra cannot get your records. Please allow the software to access your network!");
+  //   jQuery("#loading_records_spinner").hide();
+  // });
+
+  $scope.update_my_records_to_local_storage = function(obj) {
+    if (obj) {
+      var text_content = JSON.stringify(obj);
+      socket.emit("update_all_records_on_local_server", { text_content: text_content });
+    } else {
+      var text_content = JSON.stringify($scope.records);
+      socket.emit("update_all_records_on_local_server", { text_content: text_content });
+    };
+
+  };
+
+  socket.on("update_all_records_to_local_server_failed", function(response) {
+    alert("Sorry, update all records failed");
+  });
+
+  socket.on("update_all_records_to_local_server_successed", function(response) {
+    jQuery("#page_loading").hide();
+    // $scope.$apply(function() {
+    //   $scope.records = JSON.parse(response.records_text);
+    //   $scope.close_popup_upload_record();
+    // });
+    $scope.close_popup_upload_record();
+  });
+
   $scope.selected_record = {
     name: "No records hovered",
     statistics: [0, 0, 0],
@@ -364,6 +328,14 @@ var app = angular.module("app")
       $scope.timer_interval = null;
     };
   };
+
+  $scope.cancel_custom_timeout = function() {
+    if ($scope.custom_timeout) {
+      $timeout.cancel($scope.custom_timeout);
+      $scope.custom_timeout = null;
+    };
+  };
+
   $scope.display_record_statistics = function(index) {
       $scope.timer = 1;
       $scope.timer_interval = $interval(function() {
@@ -398,39 +370,63 @@ var app = angular.module("app")
     $window.open("laboratory.html", "_blank", 'width=1280,height=720');
   };
   $scope.delete_this_record = function(index) {
-    if (confirm("Delete record ?")) {
-      $scope.selected_record = {
-        name: "No records hovered",
-        statistics: [0, 0, 0],
+    if (confirm("Delete record " + $scope.records[index].name + "?")) {
+      jQuery("#page_loading").show();
+      if (index == $scope.records.length - 1) {
+        $scope.selected_record = {
+          name: "No records hovered",
+          statistics: [0, 0, 0],
+        };
+        $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
+      } else {
+        $scope.selected_record = $scope.records[index + 1];
+        $scope.init_chart($scope.selected_record.statistics[0], $scope.selected_record.statistics[1], $scope.selected_record.statistics[2]);
       };
+
       $scope.cancel_all_timeouts_and_intervals();
+
+      $scope.selected_index = index;
+      $scope.cancel_all_timeouts_and_intervals();
+
+      // $scope.new_records = $scope.records;
+      // $scope.new_records.splice(index, 1);
+      $scope.update_my_records_to_local_storage($scope.new_records);
+
       $scope.records.splice(index, 1);
       $window.localStorage["cassandra_records"] = JSON.stringify($scope.records);
     };
   };
 
   socket.on("save_record_to_server_successed", function(response) {
-    $scope.close_popup_upload_record();
+
     response.record_data.data = [];
-    $scope.records.push(response);
-    $window.localStorage["cassandra_records"] = JSON.stringify($scope.records);
+    $scope.$apply(function () {
+      $scope.records.push(response);
+      $window.localStorage["cassandra_records"] = JSON.stringify($scope.records);
+      $scope.update_my_records_to_local_storage();
+    });
     alert("Record saved successfully!");
   });
 
   $scope.importPackageFromTextFile = function($fileContent) {
-    var result = [];
-    var lines = $fileContent.split('\n');
-    for(var line = 0; line < lines.length; line++) {
-      result.push(lines[line]);
-    };
-    if ($scope.file_content.length > 0) {
-      $scope.file_content = $scope.file_content.concat($fileContent);
-      $scope.ecg_data = $scope.ecg_data.concat(result);
-    } else {
-      $scope.file_content = $fileContent;
-      $scope.ecg_data = result;
-    };
-    $scope.update_ecg_data_and_duration();
+    jQuery("#page_loading").show();
+    $scope.custom_timeout = $timeout(function() {
+      var result = [];
+      var lines = $fileContent.split('\n');
+      for(var line = 0; line < lines.length; line++) {
+        result.push(lines[line]);
+      };
+      if ($scope.file_content.length > 0) {
+        $scope.file_content = $scope.file_content.concat($fileContent);
+        $scope.ecg_data = $scope.ecg_data.concat(result);
+      } else {
+        $scope.file_content = $fileContent;
+        $scope.ecg_data = result;
+      };
+      $scope.update_ecg_data_and_duration();
+      jQuery("#page_loading").hide();
+      $scope.cancel_custom_timeout();
+    }, 200);
   };
   $scope.update_duration = function() {
     $scope.record_duration = Math.floor($scope.ecg_data.length / ($scope.record_sampling_frequency) * 10) / 10;
@@ -461,35 +457,58 @@ var app = angular.module("app")
     $scope.record_sampling_frequency = 100;
     $scope.record_duration = Math.floor($scope.file_content.length / ($scope.record_sampling_frequency) * 10) / 10;
     $scope.record_date = new Date();
-    jQuery("#upload_record_popup > form > .div_small_popup").animate({
-      top: 140,
-      opacity: 0
-    }, 400, function() {
-      jQuery("#upload_record_popup").hide();
-    });
+    $scope.custom_timeout = $timeout(function () {
+      jQuery("#upload_record_popup > form > .div_small_popup").animate({
+        top: 140,
+        opacity: 0
+      }, 400, function() {
+        jQuery("#upload_record_popup").hide();
+      });
+      $scope.cancel_custom_timeout();
+    }, 160);
   };
 
   $scope.save_this_record = function() {
-    $scope.new_record = {
-      name: $scope.record_name,
-      date: $scope.record_date,
-      data_link: $scope.local_server.link + "\\bin\\saved-records\\" + $scope.record_name.split(' ').join('_') + ".txt",
-      description: $scope.record_comment,
-      clinical_symptoms: {
-        chest_pain: false,
-        shortness_of_breath: false,
-        severe_sweating: false,
-        dizziness: false,
-      },
-      statistics: [null, null, null],
-      send_to_doctor: false,
-      record_data: {
-        sampling_frequency: $scope.record_sampling_frequency,
-        data: $scope.ecg_data
-      }
-    };
-    console.log($scope.file_content);
-    socket.emit("save_this_record_to_server", $scope.new_record);
+    jQuery("#page_loading").show();
+    $scope.custom_timeout = $timeout(function() {
+
+      $scope.new_record = {
+        name: $scope.record_name,
+        date: $scope.record_date,
+        data_link: $scope.local_server.link + "\\bin\\saved-records\\" + $scope.record_name.split(' ').join('_') + ".txt",
+        description: $scope.record_comment,
+        clinical_symptoms: {
+          chest_pain: false,
+          shortness_of_breath: false,
+          severe_sweating: false,
+          dizziness: false,
+        },
+        statistics: [null, null, null],
+        send_to_doctor: false,
+        record_data: {
+          sampling_frequency: $scope.record_sampling_frequency,
+          data: $scope.ecg_data
+        }
+      };
+      socket.emit("save_this_record_to_server", $scope.new_record);
+      $scope.cancel_custom_timeout();
+
+    }, 1600);
 
   };
+
+  socket.on("save_record_to_server_failed", function(response) {
+    alert("Save record to server failed");
+  });
+
+
+
+  // jQuery("#page_loading").show();
+  // $scope.custom_timeout = $timeout(function() {
+  //
+  //
+  //
+  //   jQuery("#page_loading").hide();
+  //   $scope.cancel_custom_timeout();
+  // }, 200);
 }]);
