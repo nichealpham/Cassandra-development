@@ -20,9 +20,9 @@ app.service ('dsp', function() {
     if (scale == null) {
       scale = 1;
     };
-    for (i = 0; i < data.length - span; i++) {
+    for (var i = 0; i < data.length - span; i++) {
       var sum = data[i] * scale;
-      for (k = 2; k <= span; k++) {
+      for (var k = 2; k <= span; k++) {
         sum += data[i + k - 1];
       };
       var result = Math.floor(sum / (span + scale - 1));
@@ -40,9 +40,9 @@ app.service ('dsp', function() {
       return data;
     };
     var result = [];
-    for (i = 0; i < data.length - factor; i += factor) {
+    for (var i = 0; i < data.length - factor; i += factor) {
       var value = 0;
-      for (k = 1; k <= factor; k++) {
+      for (var k = 1; k <= factor; k++) {
         value += data[i + k - 1];
       };
       value = Math.floor(value / factor);
@@ -58,7 +58,7 @@ app.service ('dsp', function() {
     if (power == null) {
       power = 4;
     };
-    for (i = 1; i < data.length - 1; i++) {
+    for (var i = 1; i < data.length - 1; i++) {
       if ((data[i] > data[i - 1]) && (data[i] > data[i + 1])) {
         var value = Math.pow((Math.pow(data[i] - data[i - 1], power) + Math.pow(data[i] - data[i + 1], power)), 1 / power)  + baseline;
         new_data.push(value);
@@ -71,7 +71,7 @@ app.service ('dsp', function() {
   this.cal_mean = function(data) {
     var sum = 0;
     var deduce = 0;
-    for (i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       if (data[i]) {
         sum += data[i];
       } else {
@@ -84,7 +84,7 @@ app.service ('dsp', function() {
     var mean = this.cal_mean(data);
     var sum_of_sqrt = 0;
     var deduce = 0;
-    for (i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       if (data[i]) {
         sum_of_sqrt += Math.pow(data[i] - mean, 2);
       } else {
@@ -95,7 +95,7 @@ app.service ('dsp', function() {
   };
   this.find_max = function(data) {
     var max = data[0];
-    for (i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       if (data[i] > max) {
         max = data[i];
       };
@@ -104,7 +104,7 @@ app.service ('dsp', function() {
   };
   this.find_min = function(data) {
     var min = data[0];
-    for (i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       if (data[i] < min) {
         min = data[i];
       };
@@ -113,14 +113,14 @@ app.service ('dsp', function() {
   };
   this.find_peaks = function(data, min_peak_value, min_peak_distance) {
     var peak_locs = [];
-    for (i = 1; i < data.length - 1; i++) {
+    for (var i = 1; i < data.length - 1; i++) {
       if ((data[i] > data[i - 1]) && (data[i] > data[i + 1])) {
         peak_locs.push(i);
       };
     };
     if (min_peak_value != null) {
       var new_peak_locs = [];
-      for (i = 0; i < peak_locs.length; i++) {
+      for (var i = 0; i < peak_locs.length; i++) {
         if (data[peak_locs[i]] >= min_peak_value) {
           new_peak_locs.push(peak_locs[i]);
         };
@@ -131,7 +131,7 @@ app.service ('dsp', function() {
       var new_peak_locs = [peak_locs[0]];
       var last_peak_index = peak_locs[0];
 
-      for (i = 1; i < peak_locs.length; i++) {
+      for (var i = 1; i < peak_locs.length; i++) {
         if ((peak_locs[i] - last_peak_index) > min_peak_distance) {
           new_peak_locs.push(peak_locs[i]);
           last_peak_index = peak_locs[i];
@@ -160,7 +160,7 @@ app.service ('dsp', function() {
   };
   this.create_threshold = function(points, value) {
     var result = [];
-    for (i = 0; i < points; i++) {
+    for (var i = 0; i < points; i++) {
       result.push(value);
     };
     return result;
@@ -196,16 +196,20 @@ app.service ('dsp', function() {
     };
     var t_peaks = [];
     var t_locs = [];
+    // var iso = this.cal_mean(ecg_data);
     for (var hk = 0; hk < qrs_locs.length - 1; hk++) {
-      var qrs = ecg_data[qrs_locs[hk]];
+
+      var delay_of_qrs = 1;
+      var delay_of_iso = -3;
+      var qrs = ecg_data[qrs_locs[hk] + delay_of_qrs];
+      var iso = ecg_data[qrs_locs[hk] + delay_of_iso];
+      var qrs_amplitude = Math.abs(qrs - iso);
+
       var qrs_leng = qrs_locs[hk + 1] - qrs_locs[hk];
-      var step = qrs_leng;
-      step = Math.ceil(step / 2);
-      step += qrs_locs[hk];
-      var iso = ecg_data[step];
-      var qrs_amplitude = Math.abs(qrs - iso) + baseline;
+      // var iso = ecg_data[Math.ceil((qrs_locs[hk] + qrs_locs[hk + 1]) / 2 )];
+
       var segment = [];
-      var index_to_start  = Math.floor(0.15 * qrs_leng) + qrs_locs[hk];
+      var index_to_start  = Math.floor(0.1 * qrs_leng) + qrs_locs[hk];
       var index_to_end    = Math.floor(0.5 * qrs_leng) + qrs_locs[hk];
       for (var lm = index_to_start; lm < index_to_end; lm++) {
         var value = ecg_data[lm] - iso;
@@ -220,7 +224,10 @@ app.service ('dsp', function() {
       var t_amplitude = ecg_data[t_loc] - iso;
       t_peaks.push(Math.floor(t_amplitude / qrs_amplitude * 100));
       t_locs.push(t_loc);
+      console.log(qrs + "_" + iso + "_" + ecg_data[t_loc]);
+
     };
+
     return [t_peaks, t_locs];
   };
   this.std_detect = function(fs, ecg_data, qrs_locs, t_locs, baseline, power) {
@@ -240,12 +247,16 @@ app.service ('dsp', function() {
     var std_bin = [];
     for (var hk = 0; hk < t_locs.length; hk++) {
       var std = 0;
+
+      var delay_of_qrs = 1;
+      var delay_of_iso = -3;
+      var qrs = ecg_data[qrs_locs[hk] + delay_of_qrs];
+      var iso = ecg_data[qrs_locs[hk] + delay_of_iso];
+      var qrs_amplitude = Math.abs(qrs - iso);
+
       var rt_length = t_locs[hk] - qrs_locs[hk];
-      var st_index_start = Math.ceil(rt_length / 3) + qrs_locs[hk];
-      var st_index_end = Math.ceil(rt_length / 3 * 2) + qrs_locs[hk];
-      var iso_index = Math.ceil((qrs_locs[hk] + qrs_locs[hk + 1]) / 2);
-      var iso = ecg_data[iso_index];
-      var qrs_amplitude = Math.abs(ecg_data[qrs_locs[hk]] - iso) + baseline;
+      var st_index_start = Math.ceil(rt_length / 3) + qrs_locs[hk] + delay_of_qrs;
+      var st_index_end = Math.ceil(rt_length / 3 * 2) + qrs_locs[hk] + delay_of_qrs;
 
       for (var lm = st_index_start; lm < st_index_end; lm++) {
         std += (ecg_data[lm] - iso);
