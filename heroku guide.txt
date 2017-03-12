@@ -1,0 +1,25 @@
+- heroku login
+- cd ...
+- git clone https://github.com/heroku/node-js-getting-started.git
+- cd node-js-getting-started
+- ... make changes to the folder here
+- heroku create cassandra-server
+- git push heroku master
+
+// Deploy new code
+// Step 1: update package.json
+- git app .
+- git commit -m "Demo"
+
+// Step 2: then push to heroku
+
+- git push heroku master
+
+// If not sucessful try
+
+- heroku git:remote -a cassandra-server
+- heroku buildpacks:set https://github.com/heroku/heroku-buildpack-nodejs#v83 -a cassandra-server
+
+// Destroy heroku
+
+- heroku apps:destroy --app cassandra-server
