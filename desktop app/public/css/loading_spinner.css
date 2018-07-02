@@ -152,7 +152,8 @@
   content: '';
 }
 .sectional_loading:after {
-  background: rgb(31,37,61);
+  /*background: rgb(31,37,61);*/
+  background: transparent;
   width: 70%;
   height: 70%;
   border-radius: 50%;

@@ -152,6 +152,14 @@ h1, h2, p, a, span{
 	padding: 0;
 	list-style-type: none;
 }
+.noselect{
+			    -webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
 	.horizontal-list li {
 		float: left;
 	}
@@ -320,7 +328,7 @@ h1, h2, p, a, span{
 				.header-menu-tab {
 					padding: 0 32px;
 					display: block;
-					line-height: 74px;
+					line-height: 68px;
 					font-size: 17px;
           border-bottom: 4px solid transparent;
 					-webkit-transition: background .3s;
@@ -417,6 +425,14 @@ h1, h2, p, a, span{
       transition: background-color 0.4s;
       background-color: #BDBDBD;
       border:none;color:white;cursor:pointer;height:46px;margin-top:2px;border-radius:2px;line-height:36px;font-size:15px;width:120px;float:right;color:#424242;
+    }
+    .sign-in.button.cancel-btn {
+      transition: background-color 0.4s;
+      background-color: #BDBDBD;
+      border:none;color:white;cursor:pointer;height:46px;margin-top:2px;border-radius:2px;line-height:36px;font-size:14px;width:120px;float:left;color:#646464;
+    }
+    .sign-in.button.cancel-btn:hover {
+      background-color: #E0E0E0;
     }
     .div_small_popup > .body > .collum > .collum > .my-card > .cancel-btn:hover {
       background-color: #E0E0E0;
@@ -583,6 +599,10 @@ h1, h2, p, a, span{
     }
     .hover_caution {
       transition: color 0.4s;
+    }
+    .ct-pointlabel {
+      color: red;
+      font-size:10px;
     }
     .hover_caution:hover {
       color: rgb(252,177,80);
@@ -1362,3 +1382,186 @@ h1, h2, p, a, span{
           .e_health_input_block input {
             display:inline-block;float:left;height:46px;width:100%;padding-left:10px;padding-right:10px;font-size: 15px;
           }
+          .red-hover-container {
+            transition: color 0.1s;
+          }
+          .red-hover-container:hover {
+            color: rgb(230,76,101);
+          }
+          .red-hover {
+            transition: color 0.1s;
+          }
+          .red-hover:hover {
+            color: rgb(230,76,101);
+          }
+          .tooltip {
+              position: relative;
+              cursor: pointer;
+              float: left;
+              padding: 6px 6px 6px 0px;
+              display: inline-block;
+
+          }
+          .tooltip span {
+              position: relative;
+              display: inline-block;
+              cursor: pointer;
+              float: left;
+              padding: 6px 6px 6px 0px;
+              display: inline-block;
+          }
+          .tooltip .tooltiptext {
+              display: none;
+              padding-left: 10px;
+              padding-right: 10px;
+              padding-top: 5px;
+              padding-bottom: 5px;
+              min-width: 100px;
+              background-color: black;
+              color: #fff;
+              text-align: center;
+              border-radius: 6px;
+              /* Position the tooltip */
+              position: relative;
+              float: left;
+              left: 2px;
+              top: 2px;
+              z-index: 1;
+              min-width: 120px;
+          }
+
+          .tooltip:hover .tooltiptext {
+              display: inline-block;
+          }
+
+					.card_trongsuot {
+						/*background-color: rgba(57,66,100,0.6);*/
+						/*background-color: rgba(34,39,63,0.52);*/
+						background-color: rgba(0,0,0,0.16);
+					}
+					.card_trongsuot_2 {
+						/*background-color: rgba(57,66,100,0.6);*/
+						/*background-color: rgba(34,39,63,0.64);*/
+						background-color: rgba(0,0,0,0.24);
+						/*background-color: transparent;*/
+					}
+
+					[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
+}
+
+.window_no_drag {
+	-webkit-app-region: no-drag;
+}
+
+.window_drag {
+	-webkit-app-region: drag;
+}
+
+#title {
+ position: fixed;
+ top: 0px;
+ left: 6px; 
+}
+
+
+
+
+
+#title-bar-btns {
+ -webkit-app-region: no-drag;
+ position: fixed;
+ top: 6px;
+ right: 0px;
+}
+
+.box_handler {
+	position: absolute;
+	top: 0px;
+	right: 0px; 
+	width: 100px;
+}
+
+.box_handler_btns {
+	position: absolute;
+	top: 6px;
+	right: 0px;
+	width: 100px;
+}
+.handler-btn {
+	width: 17px;
+	height: 17px;
+	border-radius: 4px;
+	float:right;
+	margin-right:12px;
+	color:white;
+	font-size: 12px;
+	cursor: pointer;
+	-webkit-app-region: no-drag;
+	outline: none;
+	border: 2px solid #FFFFFF;
+	display: inline-block;
+	text-align: center;
+	line-height: 100%;
+	font-weight: bolder;
+	font-family: Montserrat;
+}
+
+.quit_bgcolor {
+	background-color: rgb(255,96,88);
+}
+
+.zoom_bgcolor {
+	background-color: rgb(255,192,46);
+}
+
+.mini_bgcolor {
+	background-color: rgb(39,203,64);
+}
+
+.general_black_box_dragable {
+	background-color: rgba(31,37,67,1);
+	display: inline-block;
+	border: 3px solid black;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.general_black_box_dragable .header {
+	width:100%;
+	height:60px;
+	display: inline-block;
+	cursor: move;
+}
+
+.general_black_box_dragable .body {
+	width:100%;
+	display: inline-block;
+	overflow: hidden;
+}
+.app_mail_anchor_title {
+	border:0px;font-family:Montserrat;height:46px;line-height:46px;width:100%;display:inline-block;padding-left:12px;
+	cursor: pointer;font-size:14px;
+	background-color: rgba(31,37,61,0.54);
+	/*border-top: 2px solid rgb(31,37,61);*/
+	/*border-bottom: 2px solid rgb(31,37,61);*/
+}
+
+.app_mail_anchor_title:hover {
+	outline: none;
+	text-decoration: none;
+}
+.hover_hightlight {
+	border: 2px solid transparent;
+	border-radius:3px;
+	transition: border 0.4s;
+}
+.hover_hightlight:hover {
+	border: 2px solid steelblue;
+}
+

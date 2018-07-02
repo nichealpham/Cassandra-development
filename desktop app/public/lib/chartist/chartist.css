@@ -138,7 +138,7 @@
   text-anchor: end; }
 
 .ct-grid {
-  stroke: rgba(0, 0, 0, 0.2);
+  stroke: rgba(0,0,0,0.2);
   stroke-width: 1px;
   stroke-dasharray: 2px; }
 
@@ -180,10 +180,10 @@
   fill: #f4c63d; }
 
 .ct-series-c .ct-point, .ct-series-c .ct-line, .ct-series-c .ct-bar, .ct-series-c .ct-slice-donut {
-  stroke: #d70206; }
+  stroke: rgb(233,119,183); }
 
 .ct-series-c .ct-slice-pie, .ct-series-c .ct-area {
-  fill: #d70206; }
+  fill: rgb(233,119,183); }
 
 .ct-series-d .ct-point, .ct-series-d .ct-line, .ct-series-d .ct-bar, .ct-series-d .ct-slice-donut {
   stroke: #d17905; }
@@ -192,10 +192,10 @@
   fill: #d17905; }
 
 .ct-series-e .ct-point, .ct-series-e .ct-line, .ct-series-e .ct-bar, .ct-series-e .ct-slice-donut {
-  stroke: #453d3f; }
+  stroke: rgb(172,123,226); }
 
 .ct-series-e .ct-slice-pie, .ct-series-e .ct-area {
-  fill: #453d3f; }
+  fill: rgb(172,123,226); }
 
 .ct-series-f .ct-point, .ct-series-f .ct-line, .ct-series-f .ct-bar, .ct-series-f .ct-slice-donut {
   stroke: #59922b; }
